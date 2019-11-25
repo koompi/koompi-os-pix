@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Application version --------------------------------------------------------------
-LOCAL_VERSION="0.0.1"
+LOCAL_VERSION="0.0.2"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
 SERVER_VERSION="${GET_VERSION[@]:15:5}"
 
@@ -13,6 +13,7 @@ APP_LIST=("${RAW_DATABASE[@]:1}")
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
+BLUE=$( tput setaf 4 )
 NORMAL=$(tput sgr0)
 
 # Working directories --------------------------------------------------------------
@@ -224,7 +225,12 @@ extract() {
 }
 
 version() {
-    printf "pix $LOCAL_VERSION by KOOMPI\n"
+    printf "${GREEN}PiX $LOCAL_VERSION${NORMAL}
+Made with ${RED}LOVE${NORMAL} by KOOMPI
+Website: ${BLUE}https://koompi.com${NORMAL}
+Telegram: ${BLUE}https://t.me/koompi${NORMAL}
+Facebook: ${BLUE}https://fb.com/koompi${NORMAL}
+"
 }
 
 
