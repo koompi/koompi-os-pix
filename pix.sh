@@ -225,12 +225,7 @@ extract() {
 }
 
 version() {
-    printf "${GREEN}PiX $LOCAL_VERSION${NORMAL}
-Made with ${RED}LOVE${NORMAL} by KOOMPI
-Website: ${BLUE}https://koompi.com${NORMAL}
-Telegram: ${BLUE}https://t.me/koompi${NORMAL}
-Facebook: ${BLUE}https://fb.com/koompi${NORMAL}
-"
+    echo -e "${GREEN}PiX $LOCAL_VERSION${NORMAL}\nMade with ${RED}LOVE${NORMAL} by KOOMPI\nWebsite: ${BLUE}https://koompi.com${NORMAL}\nTelegram: ${BLUE}https://t.me/koompi${NORMAL}\nFacebook: ${BLUE}https://fb.com/koompi${NORMAL}"
 }
 
 
