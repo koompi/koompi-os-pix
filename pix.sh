@@ -172,7 +172,7 @@ check_deps() {
     if [ $? -ne 0 ] ; then
         echo -e "${RED}[no] Runtime version is invalid.${NORMAL}\n"
         echo -e "${YELLOW}=> Downloading runtime software....${NORMAL}"
-        curl -# $REPO_ADDR/packages/$WINE_NAME -o $DOWNLOAD_DIR/$WINE_NAME
+        curl -# -C - $REPO_ADDR/packages/$WINE_NAME -o $DOWNLOAD_DIR/$WINE_NAME
         yes | sudo pacman -U $DOWNLOAD_DIR/packages/$WINE_NAME;
     else
         echo -e "${GREEN}[ok] Runtime version is valid.${NORMAL}\n"
@@ -180,7 +180,7 @@ check_deps() {
 
     pacman -Qi --color always exe-thumbnailer &> /dev/null;
     if [ $? -ne 0 ] ; then
-        curl -# $REPO_ADDR/packages/$THUMBNAILER -o $DOWNLOAD_DIR/$THUMBNAILER
+        curl -# -C - $REPO_ADDR/packages/$THUMBNAILER -o $DOWNLOAD_DIR/$THUMBNAILER
         yes | sudo pacman -U $DOWNLOAD_DIR/$THUMBNAILER;
     fi;
 
@@ -284,7 +284,7 @@ install() {
         if [[ $check_pkg_exist == 200 ]]; then
         
             echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
-            curl -# $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
+            curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
             cd $DOWNLOAD_DIR
             extract ${app_to_install}
             cd $DOWNLOAD_DIR/${1}
@@ -315,7 +315,7 @@ update() {
         echo -e "${GREEN}PiX Version ${SERVER_VERSION} is available for download.${NORMAL}"
         read -p "Do you want to update PiX now? [Y/n]" confirmation;
         if [[ ${confirmation,,} == "y" || ${confirmation,,} == "yes" || ${confirmation,,} == "" ]]; then
-            curl -# $REPO_ADDR/script/pix.sh -o $HOME/pix
+            curl -# -C - $REPO_ADDR/script/pix.sh -o $HOME/pix
             chmod +x $HOME/pix
             sudo mv $HOME/pix /usr/bin/
         fi
