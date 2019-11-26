@@ -277,21 +277,45 @@ install() {
     fi
 
     check_pkg_exist=$(curl -I $REPO_ADDR/pix/${app_to_install} 2>/dev/null | head -n 1 | cut -d$' ' -f2)
+    check_pkg_size=$(curl -sI $REPO_ADDR/pix/${app_to_install} | grep -i content-length | grep '{print $2}');
     echo "${REPO_ADDR}/pix/${app_to_install}"
 
     if [[ $exist == 1 ]]; then
 
         if [[ $check_pkg_exist == 200 ]]; then
-        
-            echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
-            curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
-            cd $DOWNLOAD_DIR
-            extract ${app_to_install}
-            cd $DOWNLOAD_DIR/${1}
-            echo -e "${GREEN}Preparing to install ${1^^} ${NORMAL}";
-            chmod +x $DOWNLOAD_DIR/${1}/installer.sh
-            $(which bash) $DOWNLOAD_DIR/${1}/installer.sh
-            echo -e "${GREEN}Installation Succeeded.${NORMAL}"
+            # check disk space before installation
+            disk_size=$(df --block-size=G --output=avail /home/ | grep G | tr -d '[:space:]' | tr -dc '0-9')
+            disk_size_in_kb="$(($disk_size * 1024 * 1024))"
+            runtime_size="$((check_pkg_size * 3))"
+            if [[ $disk_size_in_kb -gt $runtime_size ]]; then
+
+                echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
+                curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
+                echo -e "Verifying downloaded package."
+                downloaded_data_size=$(wc -c $DOWNLOAD_DIR/${app_to_install} | grep '{ print $1}')
+
+                if [[ $downloaded_data_size -ge $check_pkg_size ]]; then
+
+                    cd $DOWNLOAD_DIR
+                    extract ${app_to_install}
+                    cd $DOWNLOAD_DIR/${1}
+                    echo -e "${GREEN}Preparing to install ${1^^} ${NORMAL}";
+                    chmod +x $DOWNLOAD_DIR/${1}/installer.sh
+                    $(which bash) $DOWNLOAD_DIR/${1}/installer.sh
+                    echo -e "${GREEN}Installation Succeeded.${NORMAL}"
+
+                else
+                    echo -e "${RED}Downloading unsuccessful.${NORMAL}"
+                    echo -e "${YELLOW}Please try again in a few minutes later.${NORMAL}"
+                    echo -e "${GREEN}If the problem still persists please let us know at: https://t.me/koompi"
+                    exit 1;
+                fi
+            else
+                echo -e "${RED}Not enough disk space for installation.${NORMAL}"
+                echo -e "Available space:\t ${disk_size} GBs"
+                echo -e "Required space:\t $((runtime_size * 1024 * 1024)) GBs"
+                exit 1;
+            fi      
 
         elif [[ $check_pkg_exist == 404 ]]; then
 
@@ -322,6 +346,7 @@ update() {
     else
         echo -e "${GREEN}You have the latest PiX installed.${NORMAL}"
     fi
+
     check_deps
 
     INSTALLED_APPS=($(ls $INSTALLATION_DIR));
@@ -329,6 +354,7 @@ update() {
     SERVER_APP_VERSION=()
     NEW_VERSION_APP=()
     OLD_VERSION_APP=()
+
     # Get all installed apps to create app list with version
 
     for((i=0;i<${#INSTALLED_APPS[@]};i++)) {
@@ -374,6 +400,8 @@ update() {
         else
             echo -e "Updating aborted."
         fi
+    else
+        echo -e "${GREEN}No app updates available.${NORMAL}"
     fi
 }
 
@@ -440,5 +468,5 @@ case "$1" in
     ;;
     *)
         help
-        exit 1
+        exit 1;
 esac
