@@ -299,6 +299,7 @@ install() {
                 echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
                 
                 curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
+
                 downloaded_data_size=$(wc -c $DOWNLOAD_DIR/${app_to_install} | cut -d' ' -f1)
                 echo -e "Verifying downloaded package."
 
@@ -370,7 +371,6 @@ update() {
     # Get all installed apps to create app list with version
 
     for((i=0;i<${#INSTALLED_APPS[@]};i++)) {
-        # echo "${INSTALLED_APPS[$i]}"
         VERSION=$($(which bash) ${INSTALLATION_DIR}/${INSTALLED_APPS[$i]}/version.sh)
         LOCAL_APPS_VERSION+=("${INSTALLED_APPS[$i]}_${VERSION}")
     }
