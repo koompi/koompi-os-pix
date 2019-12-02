@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# set -x
 # Application version --------------------------------------------------------------
 LOCAL_VERSION="0.0.2"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
@@ -246,11 +246,11 @@ list() {
 }
 
 install() {
-    
     exist=0
     check_deps
     app_to_install=""
     for((i=0;i<${#APP_LIST[@]};i++))
+
     do
         if [[ $1 == ${APP_LIST[$i]::(-16)} ]]; then
             exist=1
@@ -277,25 +277,36 @@ install() {
     fi
 
     check_pkg_exist=$(curl -I $REPO_ADDR/pix/${app_to_install} 2>/dev/null | head -n 1 | cut -d$' ' -f2)
-    check_pkg_size=$(curl -sI $REPO_ADDR/pix/${app_to_install} | grep -i content-length | grep '{print $2}');
-    echo "${REPO_ADDR}/pix/${app_to_install}"
+    check_pkg_size=$(curl -sI $REPO_ADDR/pix/${app_to_install} | grep -i content-length | cut -d' ' -f2 | tr -dc '0-9');
 
     if [[ $exist == 1 ]]; then
-
+        
         if [[ $check_pkg_exist == 200 ]]; then
+
             # check disk space before installation
-            disk_size=$(df --block-size=G --output=avail /home/ | grep G | tr -d '[:space:]' | tr -dc '0-9')
+            disk_size=$(df --block-size=M --output=avail /home/ | grep M | tr -d '[:space:]' | tr -dc '0-9')
             disk_size_in_kb="$(($disk_size * 1024 * 1024))"
-            runtime_size="$((check_pkg_size * 3))"
+            runtime_size="$(($check_pkg_size * 3))"
+
+            echo -e "pkg_size: $check_pkg_size" 
+            echo -e "runtime: $runtime_size"
+
+            echo -e "disk size: ${disk_size}"
+            echo -e "disk size in kb: ${disk_size_in_kb}"
+
             if [[ $disk_size_in_kb -gt $runtime_size ]]; then
 
                 echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
+                
                 curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
+                downloaded_data_size=$(wc -c $DOWNLOAD_DIR/${app_to_install} | cut -d' ' -f1)
                 echo -e "Verifying downloaded package."
-                downloaded_data_size=$(wc -c $DOWNLOAD_DIR/${app_to_install} | grep '{ print $1}')
 
-                if [[ $downloaded_data_size -ge $check_pkg_size ]]; then
+                echo -e "download: ${downloaded_data_size}"
+                echo -e "server: ${check_pkg_size}"
 
+                if [[ ${downloaded_data_size} -ge ${check_pkg_size} ]]; then
+                    echo $downloaded_data_size $check_pkg_size
                     cd $DOWNLOAD_DIR
                     extract ${app_to_install}
                     cd $DOWNLOAD_DIR/${1}
@@ -307,13 +318,15 @@ install() {
                 else
                     echo -e "${RED}Downloading unsuccessful.${NORMAL}"
                     echo -e "${YELLOW}Please try again in a few minutes later.${NORMAL}"
-                    echo -e "${GREEN}If the problem still persists please let us know at: https://t.me/koompi"
+                    echo -e "${GREEN}If the problem still persists please let us know at: https://t.me/koompi ${NORMAL}"
                     exit 1;
                 fi
             else
                 echo -e "${RED}Not enough disk space for installation.${NORMAL}"
-                echo -e "Available space:\t ${disk_size} GBs"
-                echo -e "Required space:\t $((runtime_size * 1024 * 1024)) GBs"
+                {
+                    printf "%s \x1d %s \x1d\n" "Available space:" "${disk_size} MBs"
+                    printf "%s \x1d %s \x1d\n" "Required space:" "$((runtime_size / 1024 / 1024)) MBs"
+                } | column -t -s$'\x1d'
                 exit 1;
             fi      
 
@@ -322,7 +335,6 @@ install() {
             echo -e "${RED}[404] Package not found";
         
         else
-
             echo -e "${RED}[${check_pkg_exist}] Error! Something went wrong on the server side.${NORMAL}"
             echo -e "${YELLOW}Please try again in a few minutes later.${NORMAL}"
             echo -e "${GREEN}If the problem still persists please let us know at: https://t.me/koompi"
