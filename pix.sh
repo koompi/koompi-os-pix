@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -x
 # Application version --------------------------------------------------------------
-LOCAL_VERSION="0.0.2"
+LOCAL_VERSION="0.0.3"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
 SERVER_VERSION="${GET_VERSION[@]:15:5}"
 
@@ -288,14 +288,10 @@ install() {
             disk_size_in_kb="$(($disk_size * 1024 * 1024))"
             runtime_size="$(($check_pkg_size * 3))"
 
-            echo -e "pkg_size: $check_pkg_size" 
-            echo -e "runtime: $runtime_size"
-
-            echo -e "disk size: ${disk_size}"
-            echo -e "disk size in kb: ${disk_size_in_kb}"
-
             if [[ $disk_size_in_kb -gt $runtime_size ]]; then
-
+                echo -e "${GREEN}Dear ${USER^},${NORMAL}\n"
+                echo -e "Please make sure you have a stable internet connection."
+                echo -e "If the download error or incompleted, please run the installation again.\nThe download will continue from where it was.\n"
                 echo -e "${GREEN}Dowloading ${1^^} ${NORMAL}";
                 
                 curl -# -C - $REPO_ADDR/pix/${app_to_install} -o $DOWNLOAD_DIR/${app_to_install}
@@ -303,11 +299,8 @@ install() {
                 downloaded_data_size=$(wc -c $DOWNLOAD_DIR/${app_to_install} | cut -d' ' -f1)
                 echo -e "Verifying downloaded package."
 
-                echo -e "download: ${downloaded_data_size}"
-                echo -e "server: ${check_pkg_size}"
-
                 if [[ ${downloaded_data_size} -ge ${check_pkg_size} ]]; then
-                    echo $downloaded_data_size $check_pkg_size
+                   
                     cd $DOWNLOAD_DIR
                     extract ${app_to_install}
                     cd $DOWNLOAD_DIR/${1}
@@ -381,7 +374,6 @@ update() {
         for((j=0;j<${#APP_LIST[@]};j++)){
             SERVER_FULL="${APP_LIST[$j]::-7}"
             LOCAL_FULL="${LOCAL_APPS_VERSION[$i]}"
-
             if [[ ${SERVER_FULL:(-8)} -gt ${LOCAL_FULL:(-8)} ]]; then
                 OLD_VERSION_APP+=("${LOCAL_APPS_VERSION[$i]}")
                 NEW_VERSION_APP+=("${SERVER_FULL}")
