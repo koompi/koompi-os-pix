@@ -437,7 +437,7 @@ remove() {
         fi
     else
         echo -e "${RED}Application not found!${NORMAL}"
-        echo -e "${GREEN}Tip${NORMAL}: Applicatio name might be incorrect or not installed."
+        echo -e "${GREEN}Tip${NORMAL}: Application name might be incorrect or not installed."
     fi
 }
 
