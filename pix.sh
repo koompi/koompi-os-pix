@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -x
+
 # Application version --------------------------------------------------------------
 LOCAL_VERSION="0.0.3"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
