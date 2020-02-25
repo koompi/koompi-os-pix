@@ -411,7 +411,7 @@ update() {
                 
                 for((i=0;i<${#NEW_VERSION_APP[@]};i++)){
                     echo -e "Updating apps ${NEW_VERSION_APP[$i]}"
-                    $(which bash) "$(pwd)/pix.sh" install ${NEW_VERSION_APP[$i]::(-9)}
+                    $(which bash) "/usr/bin/pix" install ${NEW_VERSION_APP[$i]::(-9)}
                 }
 
             else
