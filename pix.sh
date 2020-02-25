@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Application version --------------------------------------------------------------
-LOCAL_VERSION="0.0.3"
+LOCAL_VERSION="0.0.5"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
 SERVER_VERSION="${GET_VERSION[@]:15:5}"
 
@@ -173,7 +173,7 @@ check_deps() {
         echo -e "${RED}[no] Runtime version is invalid.${NORMAL}\n"
         echo -e "${YELLOW}=> Downloading runtime software....${NORMAL}"
         curl -# -C - $REPO_ADDR/packages/$WINE_NAME -o $DOWNLOAD_DIR/$WINE_NAME
-        yes | sudo pacman -U $DOWNLOAD_DIR/packages/$WINE_NAME;
+        yes | sudo pacman -U $DOWNLOAD_DIR/$WINE_NAME;
     else
         echo -e "${GREEN}[ok] Runtime version is valid.${NORMAL}\n"
     fi;
@@ -355,6 +355,8 @@ update() {
 
     check_deps
 
+    [[ -d $INSTALLATION_DIR ]] || mkdir -p $INSTALLATION_DIR
+
     INSTALLED_APPS=($(ls $INSTALLATION_DIR));
     LOCAL_APPS_VERSION=()
     SERVER_APP_VERSION=()
@@ -362,6 +364,11 @@ update() {
     OLD_VERSION_APP=()
 
     # Get all installed apps to create app list with version
+
+    if [[ ${#INSTALLED_APPS[@]} -eq 0 ]]; then 
+        echo -e "There is no apps installed yet."
+        exit 1;
+    fi
 
     for((i=0;i<${#INSTALLED_APPS[@]};i++)) {
         VERSION=$($(which bash) ${INSTALLATION_DIR}/${INSTALLED_APPS[$i]}/version.sh)
