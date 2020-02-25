@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Application version --------------------------------------------------------------
-LOCAL_VERSION="0.0.5"
+LOCAL_VERSION="0.1.0"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
 SERVER_VERSION="${GET_VERSION[@]:15:5}"
 
@@ -214,14 +214,7 @@ check_deps() {
 
 extract() {
     archive="$1"
-    
-    originalsize=$(du --apparent-size --block-size=1 "${archive}" | awk '{ print $1}')
-    step=100
-    blocks=$(echo "$originalsize / 512 / 20 / $step" | bc)
-
-    tar -x --checkpoint=$step --totals \
-    --checkpoint-action="exec='p=\$(echo "\$TAR_CHECKPOINT/$blocks" | bc -l);printf \"Extracting package: %.4f%%\r\" \$p'" \
-    -f $archive
+    pv $1 | tar xzf - -C $DOWNLOAD_DIR
 }
 
 version() {
@@ -368,51 +361,65 @@ update() {
     if [[ ${#INSTALLED_APPS[@]} -eq 0 ]]; then 
         echo -e "There is no apps installed yet."
         exit 1;
-    fi
-
-    for((i=0;i<${#INSTALLED_APPS[@]};i++)) {
-        VERSION=$($(which bash) ${INSTALLATION_DIR}/${INSTALLED_APPS[$i]}/version.sh)
-        LOCAL_APPS_VERSION+=("${INSTALLED_APPS[$i]}_${VERSION}")
-    }
-    
-    # Get all installed application list on the server
-
-    for ((i=0;i<${#LOCAL_APPS_VERSION[@]};i++)) {
-        for((j=0;j<${#APP_LIST[@]};j++)){
-            SERVER_FULL="${APP_LIST[$j]::-7}"
-            LOCAL_FULL="${LOCAL_APPS_VERSION[$i]}"
-            if [[ ${SERVER_FULL:(-8)} -gt ${LOCAL_FULL:(-8)} ]]; then
-                OLD_VERSION_APP+=("${LOCAL_APPS_VERSION[$i]}")
-                NEW_VERSION_APP+=("${SERVER_FULL}")
+    else
+        # get all installed app and only if they have a versio file
+        for((i=0;i<${#INSTALLED_APPS[@]};i++)) {
+            if [[ -f "${INSTALLATION_DIR}/${INSTALLED_APPS[$i]}/version.sh" ]]; then
+                VERSION=$($(which bash) ${INSTALLATION_DIR}/${INSTALLED_APPS[$i]}/version.sh)
+                LOCAL_APPS_VERSION+=("${INSTALLED_APPS[$i]}_${VERSION}")
             fi
         }
-    }
-    
-    if [[ ${#NEW_VERSION_APP[@]} -gt 0 ]]; then
-        for((i=0;i<${#NEW_VERSION_APP[@]};i++)) {
-            if [[ i -eq 0 ]]; then
-                printf "${NORMAL}\n"
-                printf "%s\x1d %s\x1d %s\x1d" "NO" "${RED}LOCAL VERSION${NORMAL}" "${GREEN}NEW VERSION${NORMAL}";
-                printf "${NORMAL}\n"
-            fi
-            
-            printf "%d \x1d %s \x1d %s \x1d" "$((i + 1))" "${RED}${OLD_VERSION_APP}${NORMAL}" "${GREEN}${NEW_VERSION_APP[$i]}${NORMAL}";
-        } | column -t -s$'\x1d'
-        printf "${NORMAL}\n"
 
-        read -p "Do you want to update now? [Y/n]" answer;
-        if [[ ${answer,,} == "y" || ${answer,,} == "yes" ]]; then
-            
-            for((i=0;i<${#NEW_VERSION_APP[@]};i++)){
-                echo -e "Updating apps ${NEW_VERSION_APP[$i]}"
-                $(which bash) "$(pwd)/pix.sh" install ${NEW_VERSION_APP[$i]::(-9)}
+        # Get all installed application list on the server
+
+        for ((i=0;i<${#LOCAL_APPS_VERSION[@]};i++)) {
+
+            LOCAL_FULL_NAME_APP="${LOCAL_APPS_VERSION[$i]}"
+
+            for((j=0;j<${#APP_LIST[@]};j++)){
+
+                # compare name first
+                if [[ "${APP_LIST[$j]::(-16)}" ==  "${LOCAL_FULL_NAME_APP::(-9)}" ]]; then 
+                    server_app=${APP_LIST[$j]::(-7)}
+                    server_app_version=${server_app:(-8)}
+                    local_app_version=${LOCAL_FULL_NAME_APP:(-8)}
+                    # now compare version
+                    if [[ $server_app_version -gt $local_app_version ]]; then 
+                        OLD_VERSION_APP+=("$LOCAL_FULL_NAME_APP")
+                        NEW_VERSION_APP+=("${APP_LIST[$j]::(-7)}")
+                    fi
+
+                fi
             }
 
+        }
+        
+        if [[ ${#NEW_VERSION_APP[@]} -gt 0 ]]; then
+            for((i=0;i<${#NEW_VERSION_APP[@]};i++)) {
+                if [[ i -eq 0 ]]; then
+                    printf "${NORMAL}\n"
+                    printf "%s\x1d %s\x1d %s\x1d" "NO" "${RED}LOCAL VERSION${NORMAL}" "${GREEN}NEW VERSION${NORMAL}";
+                    printf "${NORMAL}\n"
+                fi
+                
+                printf "%d \x1d %s \x1d %s \x1d\n" "$((i + 1))" "${RED}${OLD_VERSION_APP[$i]}${NORMAL}" "${GREEN}${NEW_VERSION_APP[$i]}${NORMAL}";
+            } | column -t -s$'\x1d'
+            printf "${NORMAL}\n"
+
+            read -p "Do you want to update now? [Y/n]" answer;
+            if [[ ${answer,,} == "y" || ${answer,,} == "yes" ]]; then
+                
+                for((i=0;i<${#NEW_VERSION_APP[@]};i++)){
+                    echo -e "Updating apps ${NEW_VERSION_APP[$i]}"
+                    $(which bash) "$(pwd)/pix.sh" install ${NEW_VERSION_APP[$i]::(-9)}
+                }
+
+            else
+                echo -e "Updating aborted."
+            fi
         else
-            echo -e "Updating aborted."
+            echo -e "${GREEN}No app updates available.${NORMAL}"
         fi
-    else
-        echo -e "${GREEN}No app updates available.${NORMAL}"
     fi
 }
 
