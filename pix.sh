@@ -215,11 +215,11 @@ check_deps() {
 extract() {
     archive="$1"
     
-    originalsize=$(file $archive | rev | cut -d' ' -f1 | rev)
+    originalsize=$(du --apparent-size --block-size=1 "${archive}" | awk '{ print $1}')
     step=100
     blocks=$(echo "$originalsize / 512 / 20 / $step" | bc)
-    
-    tar -xz --checkpoint=$step --totals \
+
+    tar -x --checkpoint=$step --totals \
     --checkpoint-action="exec='p=\$(echo "\$TAR_CHECKPOINT/$blocks" | bc -l);printf \"Extracting package: %.4f%%\r\" \$p'" \
     -f $archive
 }
