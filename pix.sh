@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Application version --------------------------------------------------------------
-LOCAL_VERSION="0.1.0"
+LOCAL_VERSION="0.2.0"
 GET_VERSION=$(curl -s https://repo.koompi.org/script/pix.sh | grep LOCAL_VERSION=)
 SERVER_VERSION="${GET_VERSION[@]:15:5}"
 
