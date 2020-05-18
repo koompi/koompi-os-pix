@@ -25,83 +25,7 @@ INSTALLATION_DIR=$HOME/.pix
 
 # Dependencies ---------------------------------------------------------------------
 
-WINE_DEPS=( "desktop-file-utils"  
-            "fontconfig"  
-            "freetype2"  
-            "gettext"  
-            "glu"  
-            "lcms2"  
-            "libpcap"  
-            "libsm"  
-            "libxcursor"  
-            "libxdamage"  
-            "libxi"  
-            "libxml2"  
-            "libxrandr"  
-            "lib32-fontconfig"  
-            "lib32-freetype2"  
-            "lib32-gcc-libs"  
-            "lib32-gettext"  
-            "lib32-glu"  
-            "lib32-lcms2"  
-            "lib32-libpcap"  
-            "lib32-libsm"  
-            "lib32-libxcursor"  
-            "lib32-libxdamage"  
-            "lib32-libxi"  
-            "lib32-libxml2"  
-            "lib32-libxrandr"
-            "alsa-lib" 
-            "alsa-plugins" 
-            "cups" 
-            "dosbox" 
-            "giflib" 
-            "gnutls" 
-            "gsm" 
-            "gst-plugins-base-libs" 
-            "libgphoto2" 
-            "libjpeg-turbo" 
-            "libldap" 
-            "libpng" 
-            "libpulse" 
-            "libxcomposite" 
-            "libxinerama" 
-            "libxslt" 
-            "mpg123" 
-            "ncurses" 
-            "ocl-icd" 
-            "openal" 
-            "samba" 
-            "sane" 
-            "sdl2" 
-            "v4l-utils" 
-            "vkd3d" 
-            "vulkan-icd-loader" 
-            "lib32-alsa-lib" 
-            "lib32-alsa-plugins" 
-            "lib32-giflib" 
-            "lib32-gnutls" 
-            "lib32-gst-plugins-base-libs" 
-            "lib32-libjpeg-turbo" 
-            "lib32-libldap" 
-            "lib32-libpng" 
-            "lib32-libpulse" 
-            "lib32-libxcomposite" 
-            "lib32-libxinerama" 
-            "lib32-libxslt" 
-            "lib32-mpg123" 
-            "lib32-ncurses" 
-            "lib32-ocl-icd" 
-            "lib32-openal" 
-            "lib32-sdl2" 
-            "lib32-v4l-utils" 
-            "lib32-vkd3d" 
-            "lib32-vulkan-icd-loader" 
-            "wine-mono" 
-            "wine_gecko" 
-            "winetricks" 
-            "rsync" 
-            "pv" );
+PIX_DEPS=( "rsync" "pv" );
 
 MISSING_DEPS="";
 
@@ -167,33 +91,17 @@ check_deps() {
         mkdir -p $DOWNLOAD_DIR; 
     fi
     sudo pacman -Sy
-    echo -e "Checking runtime version:"
-    pacman -Qi --color always wine-stable &> /dev/null;
-    if [ $? -ne 0 ] ; then
-        echo -e "${RED}[no] Runtime version is invalid.${NORMAL}\n"
-        echo -e "${YELLOW}=> Downloading runtime software....${NORMAL}"
-        curl -# -C - $REPO_ADDR/packages/$WINE_NAME -o $DOWNLOAD_DIR/$WINE_NAME
-        yes | sudo pacman -U $DOWNLOAD_DIR/$WINE_NAME;
-    else
-        echo -e "${GREEN}[ok] Runtime version is valid.${NORMAL}\n"
-    fi;
 
-    pacman -Qi --color always exe-thumbnailer &> /dev/null;
-    if [ $? -ne 0 ] ; then
-        curl -# -C - $REPO_ADDR/packages/$THUMBNAILER -o $DOWNLOAD_DIR/$THUMBNAILER
-        yes | sudo pacman -U $DOWNLOAD_DIR/$THUMBNAILER;
-    fi;
-
-    for((i=0;i<${#WINE_DEPS[@]};i++))
+    for((i=0;i<${#PIX_DEPS[@]};i++))
     do
         NUM=$(( i + 1 ))
-        echo -ne "Checking Dependencies:${YELLOW} $(( $NUM * 100 / ${#WINE_DEPS[@]}))%${NORMAL}\033[0K\r";
-        pacman -Qi --color always "${WINE_DEPS[$i]}" &> /dev/null;
+        echo -ne "Checking Dependencies:${YELLOW} $(( $NUM * 100 / ${#PIX_DEPS[@]}))%${NORMAL}\033[0K\r";
+        pacman -Qi --color always "${PIX_DEPS[$i]}" &> /dev/null;
         if [ $? -eq 0 ] ; then
             ((FOUND_NUM++))
         else
             ((MISSING_NUM++))
-            MISSING_DEPS+=" ${WINE_DEPS[$i]}"
+            MISSING_DEPS+=" ${PIX_DEPS[$i]}"
         fi;
     done;
 
