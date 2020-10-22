@@ -18,10 +18,9 @@ NORMAL=$(tput sgr0)
 
 # Working directories --------------------------------------------------------------
 REPO_ADDR="https://repo.koompi.org"
-WINE_NAME="wine-stable-4.0.2-1-x86_64.pkg.tar.xz"
-THUMBNAILER="exe-thumbnailer-0.10.1-1-any.pkg.tar.xz"
 DOWNLOAD_DIR=$HOME/Downloads
 INSTALLATION_DIR=$HOME/.pix
+FIXES_DIR=/usr/share/org.koompi.pix/fixes
 
 # Dependencies ---------------------------------------------------------------------
 
@@ -29,7 +28,7 @@ PIX_DEPS=( "rsync" "pv" );
 
 MISSING_DEPS="";
 
-# Functions -----------------------------------------------------------------------
+# Functions ------------------------------------------------------------------------
 
 semver_compare() {
     local version_a version_b pr_a pr_b
@@ -363,6 +362,51 @@ remove() {
     fi
 }
 
+fix() {
+    ARGS=($@)
+    LIST_FIXES=($(ls $FIXES_DIR))
+    if [[ ${ARGS[1]} == "" ]]; then 
+        echo -e "Showing available fixes..."
+        [[ ${#LIST_FIXES[@]} -gt 0 ]] && 
+            for((i=0;i<${#LIST_FIXES[@]};i++))
+            do
+                if [[ i -eq 0 ]]; then
+                    printf "${GREEN}\n"
+                    printf "%s \x1d %s \x1d %s \x1d\n" "NO" "TOOLS" "USAGE";
+                    printf "${NORMAL}\n"
+                fi
+                printf "%d \x1d %s \x1d %s \x1d\n" $((i + 1)) ${LIST_FIXES[$i]} "pix fix ${LIST_FIXES[$i]}";
+
+            done | column -t -s$'\x1d'
+        printf "\n"
+    else
+        VALID_FIX=()
+        INVALID_FIX=()
+        for((i=1;i<${#ARGS[@]};i++)) {
+            [[ -f ${FIXES_DIR}/${ARGS[$i]} ]] && 
+                VALID_FIX+=("${ARGS[$i]}") || 
+                INVALID_FIX+=("${ARGS[$i]}");
+        }
+
+        if [[ ${#INVALID_FIX[@]} -gt 0 ]]; then 
+            for((i=0;i<${#INVALID_FIX[@]};i++)) {
+                [[ $i -eq 0 ]] && echo -e "\n${YELLOW}These fixes are incorrect or not available.${NORMAL}\n"
+                echo -e "${RED}=> ${INVALID_FIX[$i]}${NORMAL}"
+            }
+            echo -e "\n${YELLOW}Please double check your spelling. Skipping...${NORMAL}\n"
+        fi
+
+        if [[ ${#VALID_FIX[@]} -gt 0 ]]; then 
+            for((i=0;i<${#VALID_FIX[@]};i++)) {
+                [[ $i -eq 0 ]] && echo -e "Executing maintenance...\n"
+                echo -e "${GREEN}=> ${VALID_FIX[$i]}${NORMAL}"
+                $(which bash) ${FIXES_DIR}/${VALID_FIX[$i]}
+            }
+            echo -e "\n${GREEN}Maintenance completed. Exiting...${NORMAL}\n"
+        fi
+    fi
+}
+
 help(){
     {
     echo -e "${GREEN}"
@@ -372,6 +416,8 @@ help(){
     printf "%s \x1d %s \x1d %s \x1d %s \x1d\n" "Installing appplication:" "pix i app-name" "pix i ms-office-2013" "i = install";
     printf "%s \x1d %s \x1d %s \x1d %s \x1d\n" "Removing application:" "pix r app-name" "pix r ms-office-2013" "r = remove";
     printf "%s \x1d %s \x1d %s \x1d %s \x1d\n" "Updating application:" "pix u" "" "u = update";
+    printf "%s \x1d %s \x1d %s \x1d %s \x1d\n" "Checking fixes list" "pix f" "" "f = fix";
+    printf "%s \x1d %s \x1d %s \x1d %s \x1d\n" "Checking fixes list" "pix f problem" "pix f panel" "f = fix";
     } | column -t -s$'\x1d'
     echo -e ""
 } 
@@ -388,6 +434,9 @@ case "$1" in
     ;;
     u | update | -u | --update)
         update $2
+    ;;
+    f | fix | -f | --fix)
+        fix $@
     ;;
     v | version | -v | --version)
         version
