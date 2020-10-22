@@ -32,7 +32,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
             .template(&format!(
                 "{app} {bar}",
                 app = app_name,
-                bar = "{wide_msg}{spinner} [{bar:40.green/blue}] {percent:>3}% {total_bytes:>10}"
+                bar = "{wide_msg}{spinner} [{bar:60.green/blue}] {percent:>3}% {total_bytes:>10}"
             ))
             .progress_chars("#>-"),
     );
