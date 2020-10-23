@@ -1,2 +1,2 @@
-pix/target/
+**/target/
 *.tar.gz
