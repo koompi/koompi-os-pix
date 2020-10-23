@@ -58,3 +58,10 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
     pb.finish();
     Ok(())
 }
+
+// Download
+// download(
+//     "koompi-themes_20200309.tar.gz",
+//     "koompi-themes",
+//     "http://repo.koompi.org/pix/koompi-themes_20200309.tar.gz",
+// )?;

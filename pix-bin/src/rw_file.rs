@@ -32,3 +32,15 @@ pub fn w_file(file_name: &str, data: &str) -> Result<(), Error> {
         Err(e) => Err(e),
     }
 }
+
+// rw file
+// match w_file("/tmp/hello.txt", "Hello world") {
+//     Ok(_) => match r_file("hello.txt") {
+//         Ok(d) => {
+//             println!("{:?}", d);
+//             Ok(())
+//         }
+//         Err(e) => Err(e),
+//     },
+//     Err(e) => Err(e),
+// }
