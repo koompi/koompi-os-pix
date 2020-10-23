@@ -17,10 +17,19 @@ use handlers::download::download;
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 fn main() -> Result<(), anyhow::Error> {
-    // download(
-    //     "koompi-themes_20200309.tar.gz",
-    //     "koompi-themes",
-    //     "http://repo.koompi.org/pix/koompi-themes_20200309.tar.gz",
-    // )?;
     Ok(())
 }
+
+// Downloadn
+// download(
+//     "koompi-themes_20200309.tar.gz",
+//     "koompi-themes",
+//     "http://repo.koompi.org/pix/koompi-themes_20200309.tar.gz",
+// )?;
+
+// Check development or production environment
+// if cfg!(debug_assertions) {
+//     println!("dev")
+// } else {
+//     println!("pro")
+// }
