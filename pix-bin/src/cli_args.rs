@@ -13,7 +13,7 @@ pub fn command_line_interface<'a, 'b>() -> App<'a, 'b> {
         .author(AUTHOR)
         .arg(
             Arg::with_name("install")
-                .help("install applications")
+                .help("Install applications")
                 .short("i")
                 .long("install")
                 .takes_value(true)
@@ -21,13 +21,13 @@ pub fn command_line_interface<'a, 'b>() -> App<'a, 'b> {
         )
         .arg(
             Arg::with_name("update")
-                .help("update applications")
+                .help("Update applications")
                 .short("u")
                 .long("update"),
         )
         .arg(
             Arg::with_name("remove")
-                .help("remove applications")
+                .help("Remove applications")
                 .short("r")
                 .long("remove")
                 .takes_value(true)
@@ -35,9 +35,23 @@ pub fn command_line_interface<'a, 'b>() -> App<'a, 'b> {
         )
         .arg(
             Arg::with_name("search")
-                .help("search applications")
+                .help("Search applications")
                 .short("s")
                 .long("search")
+                .takes_value(true)
+                .multiple(true),
+        )
+        .arg(
+            Arg::with_name("list")
+                .help("List applications")
+                .short("l")
+                .long("list"),
+        )
+        .arg(
+            Arg::with_name("fix")
+                .help("Fix system issues")
+                .short("f")
+                .long("fix")
                 .takes_value(true)
                 .multiple(true),
         )
