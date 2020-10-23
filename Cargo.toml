@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "pix-bin",
+    "pix-web"
+]
