@@ -1,3 +1,4 @@
 pub mod command;
-pub mod download;
 pub mod configure;
+pub mod download;
+pub mod rw_file;

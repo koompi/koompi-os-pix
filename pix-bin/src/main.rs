@@ -5,20 +5,32 @@
 mod handlers;
 
 // Import standard libs
-use std::io::BufWriter;
+use std::io::{Error, ErrorKind};
 
 // Import crates
 use tokio::{fs, io::AsyncWriteExt};
 
 // Use local mods
 use handlers::download::download;
-
+use handlers::rw_file::{r_file, w_file};
 // CONSTANTS
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-fn main() -> Result<(), anyhow::Error> {
+fn main() -> Result<(), Error> {
     Ok(())
 }
+
+// rw file
+// match w_file("/tmp/hello.txt", "Hello world") {
+//     Ok(_) => match r_file("hello.txt") {
+//         Ok(d) => {
+//             println!("{:?}", d);
+//             Ok(())
+//         }
+//         Err(e) => Err(e),
+//     },
+//     Err(e) => Err(e),
+// }
 
 // Downloadn
 // download(
