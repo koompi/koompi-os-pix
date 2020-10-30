@@ -3,8 +3,10 @@ pub mod utils;
 pub mod graphql;
 pub mod models;
 use actix_web::{
-    guard, web, App, HttpResponse, HttpServer, Result,
+    guard, web, App, HttpResponse, HttpServer, Result, http::header
 };
+// use actix_http::Response;
+// use actix_http::http::header::ContentType;
 use envfile::EnvFile;
 use models::packages::Packages;
 use utils::json_fs;
@@ -13,6 +15,7 @@ use std::{
     fs::metadata,
     path::Path
 };
+use actix_cors::Cors;
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql::{EmptySubscription, Schema};
 use async_graphql_actix_web::{Request, Response};
@@ -52,7 +55,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(schema.clone())
-            // .data(db.clone())
+            .wrap(Cors::default().allow_any_header().allowed_methods(vec!["POST"]).allow_any_origin().allowed_header(header::CONTENT_TYPE))  
             .service(web::resource("/").guard(guard::Post()).to(index))
             .service(web::resource("/").guard(guard::Get()).to(index_playground))
     })

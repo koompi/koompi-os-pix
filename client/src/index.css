@@ -1,13 +1,210 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
+
+html {
+	min-width: 100vw;
+	max-width: 100vw;
+	min-height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+	min-width: 100vw;
+	max-width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 20 !important;
+	font-family: "Fira Code", monospace;
+	color: green;
+}
+
+* {
+	box-sizing: border-box;
+	font-weight: 500;
+	vertical-align: text-top;
+	letter-spacing: 0.01rem;
+	background: rgb(0, 0, 0);
+	font-family: "Fira Code", monospace;
+}
+
+#root {
+	min-width: 50vw;
+	max-width: 50vw;
+	min-height: 80vh;
+	position: absolute;
+	top: 10vh;
+	left: 25vw;
+	z-index: 0;
+	border: cyan 2px solid;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+.home_header {
+	padding: 0.5rem 1rem;
+	line-height: 1.6rem;
+}
+
+.pix {
+	font-weight: 600;
+}
+
+a {
+	font-weight: 500;
+	color: green;
+}
+
+.box {
+	width: 100%;
+	height: auto;
+	margin-top: 10px;
+	border: green 2px solid;
+	padding: 1rem;
+	position: relative;
+}
+
+.cp_btn {
+	padding: 0.5rem 2rem;
+	border: green 2px solid;
+	font-size: 1.2rem;
+	background: black;
+	cursor: pointer;
+	position: absolute;
+	top: 2.1rem;
+	right: 1rem;
+	color: green;
+}
+
+.App {
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	padding-top: 2rem;
+}
+
+/* Terminal */
+.terminal {
+	font-weight: 500;
+}
+.host {
+	color: purple;
+}
+
+.at {
+	color: coral;
+}
+
+.user {
+	color: crimson;
+}
+.path {
+	color: darkcyan;
+}
+
+/* Tab */
+.tab_bar {
+	width: 100%;
+	height: 50px;
+	border: cyan 1px solid;
+	border-bottom: 2px solid cyan;
+	border-left: none;
+	border-right: none;
+	text-align: left;
+	margin: 0;
+	margin-top: -1px;
+	padding: 0;
+	position: relative;
+	/* font-size: 1.2rem; */
+}
+
+.nav {
+	height: 51px;
+	margin-top: -2px;
+	line-height: 51px;
+	float: left;
+	cursor: pointer;
+	border: none;
+	border-top: 2px solid cyan;
+	border-bottom: 2px solid cyan;
+	border-left: 0px solid cyan;
+	border-right: 2px solid cyan;
+	padding: 0px 25px;
+	text-decoration: none;
+}
+
+.active {
+	border-bottom: 2px solid black !important;
+}
+
+/* typing animation */
+.css-typing {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+.css-typing p {
+	border-right: 1rem solid green;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.css-typing p.command {
+	width: 7.1em;
+	-webkit-animation: type 3s steps(10, end);
+	animation: type 3s steps(10, end);
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+@keyframes type {
+	0% {
+		width: 0;
+	}
+	1% {
+		opacity: 1;
+	}
+	99.9% {
+		border-right: 1rem solid green;
+	}
+	100% {
+		opacity: 1;
+		border: none;
+	}
+}
+
+@-webkit-keyframes type {
+	0% {
+		width: 0;
+	}
+	1% {
+		opacity: 1;
+	}
+	99.9% {
+		border-right: 1rem solid green;
+	}
+	100% {
+		opacity: 1;
+		border: none;
+	}
+}
+
+/* Enter effect */
+.entered {
+	animation-name: show;
+	animation-duration: 3100ms;
+}
+
+@keyframes show {
+	0% {
+		visibility: hidden;
+	}
+	99% {
+		visibility: hidden;
+	}
+	100% {
+		visibility: visible;
+	}
 }
