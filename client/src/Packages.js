@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import TerminalHeader from "./TermHead";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/react-hooks";
 import { v4 as Uuidv4 } from "uuid";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 
 const GET_APPS = gql`
 	query {
@@ -14,6 +16,7 @@ const GET_APPS = gql`
 `;
 
 export default function Packages() {
+  const [cp, setCP] = useState(false)
   const { loading, error, data } = useQuery(GET_APPS);
 
   if (loading) return null;
@@ -88,8 +91,11 @@ export default function Packages() {
                   <td>{app.name}</td>
                   <td>pix install {app.name}</td>
                   <td>
-                    <button style={action_btn}>Copy</button>
+                    <CopyToClipboard text={`pix install ${app.name}`}>
+                      <button style={action_btn}>Copy</button>
+                    </CopyToClipboard>
                     <button style={action_btn}>Info</button>
+                    <button style={action_btn}>Download</button>
                   </td>
                 </tr>
               ))

@@ -23,6 +23,7 @@ body {
 	letter-spacing: 0.01rem;
 	background: rgb(0, 0, 0);
 	font-family: "Fira Code", monospace;
+	outline: none;
 }
 
 #root {
@@ -49,12 +50,22 @@ p {
 .pix {
 	font-weight: 600;
 }
-
+.AppContainer {
+	width: 100%;
+}
 a {
 	font-weight: 500;
 	color: green;
 }
-
+input,
+textarea,
+button,
+#upload_btn {
+	height: 30px;
+	line-height: 1.6rem;
+	border: 2px solid green;
+	color: green;
+}
 .box {
 	width: 100%;
 	height: auto;

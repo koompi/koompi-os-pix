@@ -1,25 +1,11 @@
 {
   "applications": [
     {
-      "name": "App1",
-      "description": "Test App",
-      "maintainer": "brilliant phal",
-      "pgp_key": "123",
-      "build_date": "20201028"
-    },
-    {
-      "name": "App2",
-      "description": "Test App",
-      "maintainer": "brilliant phal",
-      "pgp_key": "123",
-      "build_date": "20201028"
-    },
-    {
-      "name": "App3",
-      "description": "Test App",
-      "maintainer": "brilliant phal",
-      "pgp_key": "123",
-      "build_date": "20201028"
+      "name": "atom",
+      "description": "ide",
+      "maintainer": "brilliatn phal",
+      "pgp_key": "",
+      "build_date": "20201032"
     }
   ],
   "version": "2020-10-28 12:18:33.541559725 UTC"
