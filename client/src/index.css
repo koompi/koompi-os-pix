@@ -24,6 +24,8 @@ body {
 	background: rgb(0, 0, 0);
 	font-family: "Fira Code", monospace;
 	outline: none;
+	font-smooth: always;
+	font-smooth: 10em;
 }
 
 #root {
@@ -59,10 +61,10 @@ a {
 }
 input,
 textarea,
-button,
-#upload_btn {
+#upload_btn,
+#submit_btn {
 	height: 30px;
-	line-height: 1.6rem;
+	line-height: 1.4rem;
 	border: 2px solid green;
 	color: green;
 }
@@ -164,8 +166,8 @@ button,
 }
 .css-typing p.command {
 	width: 7.1em;
-	-webkit-animation: type 3s steps(10, end);
-	animation: type 3s steps(10, end);
+	-webkit-animation: type 1000ms steps(10, end);
+	animation: type 1000ms steps(10, end);
 	-webkit-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
 }
@@ -205,7 +207,7 @@ button,
 /* Enter effect */
 .entered {
 	animation-name: show;
-	animation-duration: 3100ms;
+	animation-duration: 1100ms;
 }
 
 @keyframes show {

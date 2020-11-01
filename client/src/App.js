@@ -8,7 +8,6 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 
 function App() {
-	console.log(window.location.pathname === "/");
 	return (
 		<div className="AppContainer">
 			<div className="tab_bar">

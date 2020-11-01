@@ -1,33 +1,45 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
 // Apollo
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createHttpLink } from "apollo-link-http";
-const link = createHttpLink({
+import { onError } from "apollo-link-error";
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+	if (graphQLErrors) {
+		console.log(JSON.stringify(graphQLErrors, 0, 0));
+	}
+	if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
+const httpLink = createHttpLink({
 	uri: "/",
 	headers: {
-		credentials: 'same-origin',
-		'content-type': 'application/json', 
-	}
+		credentials: "same-origin",
+		"content-type": "application/json",
+		Authorization: window.sessionStorage.getItem("token") || "",
+	},
 });
+
+const link = errorLink.concat(httpLink);
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: link,
 });
 
 ReactDOM.render(
-  	<React.StrictMode>
-	  	<BrowserRouter>	
+	<React.StrictMode>
+		<BrowserRouter>
 			<ApolloProvider client={client}>
 				<App />
 			</ApolloProvider>
 		</BrowserRouter>
 	</React.StrictMode>,
-  document.getElementById('root')
+	document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

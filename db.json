@@ -1,11 +1,18 @@
 {
   "applications": [
     {
-      "name": "atom",
-      "description": "ide",
-      "maintainer": "brilliatn phal",
+      "name": "Atom",
+      "description": "IDE",
+      "maintainer": "Brilliant PHAL",
       "pgp_key": "",
-      "build_date": "20201032"
+      "build_date": "20201031"
+    },
+    {
+      "name": "firefox",
+      "description": "browser",
+      "maintainer": "brilliant ",
+      "pgp_key": "",
+      "build_date": "20201031"
     }
   ],
   "version": "2020-10-28 12:18:33.541559725 UTC"
