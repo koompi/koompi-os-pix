@@ -14,6 +14,7 @@ use std::{
     fs::metadata,
     path::Path
 };
+use actix_files;
 use actix_cors::Cors;
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig, MultipartOptions};
 use async_graphql::{EmptySubscription, Schema};
@@ -63,6 +64,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::default().allow_any_header().allowed_methods(vec!["POST"]).allow_any_origin().allowed_header(header::CONTENT_TYPE))  
             .service(web::resource("/").guard(guard::Post()).to(index).app_data(MultipartOptions::default().max_num_files(3)),)
             .service(web::resource("/").guard(guard::Get()).to(index_playground))
+            .service(actix_files::Files::new("/public", "./public").show_files_listing())
     })
     .bind(format!("{}:{}", env.get("IP").unwrap(), env.get("PORT").unwrap()))?
     .run()

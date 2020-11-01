@@ -7,6 +7,7 @@ pub struct Application {
     pub maintainer: String,
     pub pgp_key: String,
     pub build_date: String,
+    pub address: String,
 }
 
 impl Application {
@@ -31,5 +32,8 @@ impl Application {
     }
     async fn build_date(&self) -> &str {
         &self.build_date
+    }
+    async fn address(&self) -> &str {
+        &self.address
     }
 }

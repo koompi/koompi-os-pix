@@ -42,7 +42,7 @@ fn verifier(token: String) -> FieldResult<()> {
 
 #[Object]
 impl MutationRoot {
-    async fn add(&self, ctx: &Context<'_>, name: String, description: String, maintainer: String, pgp_key: String, build_date: String) -> FieldResult<Application> {
+    async fn add(&self, ctx: &Context<'_>, name: String, description: String, maintainer: String, pgp_key: String, build_date: String, address: String) -> FieldResult<Application> {
         let token = ctx.data_opt::<JwtToken>();
         match token {
             Some(t) => {
@@ -58,6 +58,7 @@ impl MutationRoot {
                                     maintainer: maintainer, 
                                     pgp_key: pgp_key, 
                                     build_date: build_date,
+                                    address: address,
                                 };
                                 db.add(new_app);
                                 db.save();
@@ -73,7 +74,7 @@ impl MutationRoot {
         }
     }
 
-    async fn update(&self, ctx: &Context<'_>, target_name: String, name: String, description: String, maintainer: String, pgp_key: String, build_date: String) -> FieldResult<Application> {
+    async fn update(&self, ctx: &Context<'_>, target_name: String, name: String, description: String, maintainer: String, pgp_key: String, build_date: String, address: String) -> FieldResult<Application> {
         let token = ctx.data_opt::<JwtToken>();
         match token {
             Some(t) => {
@@ -86,6 +87,7 @@ impl MutationRoot {
                             maintainer: maintainer, 
                             pgp_key: pgp_key, 
                             build_date: build_date,
+                            address: address,
                         };
                         db.update_one(target_name, new_app);
                         db.save();

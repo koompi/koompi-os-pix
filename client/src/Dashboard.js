@@ -4,9 +4,17 @@ import TerminalHeader from "./TermHead";
 import { v4 } from "uuid";
 import { gql } from "@apollo/client";
 import { Redirect } from "react-router-dom";
+// import  from ""
 
 const cmd_template = { cmd: "", error: false, res: "" };
-const app_template = { name: "", description: "", maintainer: "", pgpKey: "", buildDate: "" };
+const app_template = {
+	name: "",
+	description: "",
+	maintainer: "",
+	pgpKey: "",
+	buildDate: "",
+	address: "",
+};
 const update_template = {
 	targetName: "",
 	name: "",
@@ -14,6 +22,7 @@ const update_template = {
 	maintainer: "",
 	pgpKey: "",
 	buildDate: "",
+	address: "",
 };
 const extra_ui_template = { show: false, target: "" };
 const remove_template = { name: "" };
@@ -25,6 +34,7 @@ const CREATE_APP = gql`
 		$maintainer: String!
 		$pgpKey: String!
 		$buildDate: String!
+		$address: String!
 	) {
 		add(
 			name: $name
@@ -32,12 +42,14 @@ const CREATE_APP = gql`
 			maintainer: $maintainer
 			pgpKey: $pgpKey
 			buildDate: $buildDate
+			address: $address
 		) {
 			name
 			description
 			maintainer
 			pgpKey
 			buildDate
+			address
 		}
 	}
 `;
@@ -50,6 +62,7 @@ const UPDATE_APP = gql`
 		$maintainer: String!
 		$pgpKey: String!
 		$buildDate: String!
+		$address: String!
 	) {
 		update(
 			targetName: $targetName
@@ -58,12 +71,14 @@ const UPDATE_APP = gql`
 			maintainer: $maintainer
 			pgpKey: $pgpKey
 			buildDate: $buildDate
+			address: $address
 		) {
 			name
 			description
 			maintainer
 			pgpKey
 			buildDate
+			address
 		}
 	}
 `;
@@ -88,6 +103,16 @@ const GET_APP = gql`
 	}
 `;
 
+const UPLOAD_MUTATION = gql`
+	mutation Upload($file: Upload!) {
+		singleUpload(file: $file) {
+			id
+			filename
+			mimetype
+		}
+	}
+`;
+
 let s;
 
 export default function Dashboard() {
@@ -97,6 +122,34 @@ export default function Dashboard() {
 	const [update_app_state, setUpdateAppState] = useState(update_template);
 	const [current_cmd, run_cmd] = useState(cmd_template);
 	const [extra_ui, setExtraUI] = useState(extra_ui_template);
+	const [file_state, setFile] = useState({});
+	const [upload] = useMutation(UPLOAD_MUTATION, {
+		onCompleted: (res) => {
+			if (res) {
+				let new_cmds = completed;
+				new_cmds.push({
+					...current_cmd,
+					res: `Succeed: ${JSON.stringify(res)}`,
+				});
+				execCmds([...new_cmds]);
+				run_cmd(cmd_template);
+				setRemoveAppState(remove_template);
+			}
+		},
+		onError: (error) => {
+			if (error) {
+				let new_cmds = completed;
+				new_cmds.push({
+					...current_cmd,
+					error: true,
+					res: JSON.stringify(error),
+				});
+				execCmds([...new_cmds]);
+				run_cmd(cmd_template);
+				setExtraUI({ show: false, target: "" });
+			}
+		},
+	});
 
 	// Graphql
 	const [create_app, c_data] = useMutation(CREATE_APP, {
@@ -200,6 +253,8 @@ export default function Dashboard() {
 				break;
 		}
 	};
+
+	useEffect(() => {}, [file_state]);
 	useEffect(() => {}, [remove_app_state]);
 	return (
 		<div
@@ -315,7 +370,38 @@ export default function Dashboard() {
 							: setUpdateAppState({ ...update_app_state, buildDate: e.target.value })
 					}
 				/>
-				<input type="file" id="actual-btn" name="filename" hidden />
+				<label>File Address</label>
+				<input
+					style={{ width: "100%" }}
+					value={
+						extra_ui.target === "add" ? new_app_state.address : update_app_state.address
+					}
+					onChange={(e) =>
+						extra_ui.target === "add"
+							? setNewAppState({ ...new_app_state, address: e.target.value })
+							: setUpdateAppState({ ...update_app_state, address: e.target.value })
+					}
+				/>
+				<input
+					type="file"
+					id="actual-btn"
+					name="filename"
+					hidden
+					onChange={({
+						target: {
+							validity,
+							files: [file],
+						},
+					}) =>
+						validity.valid &&
+						upload({ variables: { file } }).then((res) => {
+							setNewAppState({
+								...new_app_state,
+								address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+							});
+						})
+					}
+				/>
 
 				<label
 					id="upload_btn"

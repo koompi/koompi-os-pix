@@ -12,6 +12,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
+    "apollo-upload-client": "^14.1.2",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "jsonwebtoken": "^8.5.1",

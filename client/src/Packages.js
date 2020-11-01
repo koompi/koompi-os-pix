@@ -4,12 +4,14 @@ import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/react-hooks";
 import { v4 as Uuidv4 } from "uuid";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Link } from "react-router-dom";
 
 const GET_APPS = gql`
 	query {
 		apps {
 			name
 			description
+			address
 		}
 	}
 `;
@@ -95,7 +97,12 @@ export default function Packages() {
 										<button style={action_btn}>Copy</button>
 									</CopyToClipboard>
 									<button style={action_btn}>Info</button>
-									<button style={action_btn}>Download</button>
+									<button
+										style={action_btn}
+										onClick={(e) => window.open(`${app.address}`)}
+									>
+										Download
+									</button>
 								</td>
 							</tr>
 						))}
