@@ -71,7 +71,7 @@ export default function Login() {
 				<br />
 				<button
 					style={{
-						width: "10%",
+						// width: "10%",
 						border: "2px solid green",
 						color: "green",
 						justifySelf: "end",

@@ -1,8 +1,6 @@
-import { Switch, Route, Redirect, NavLink } from "react-router-dom";
-
+import { Switch, Route, NavLink } from "react-router-dom";
 import NotFound from "./NotFound";
 import Home from "./Home";
-import About from "./About";
 import Packages from "./Packages";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
@@ -18,7 +16,7 @@ function App() {
 					Packages
 				</NavLink>
 			</div>
-			<div style={{ width: "100%" }}>
+			<div className="pageContainer">
 				<Switch>
 					<Route exact={true} path="/" component={Home} />
 					<Route exact={true} path="/login" component={Login} />

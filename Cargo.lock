@@ -607,6 +607,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "backend"
+version = "0.1.0"
+dependencies = [
+ "actix-cors",
+ "actix-files",
+ "actix-rt",
+ "actix-web",
+ "actix-web-actors",
+ "async-graphql",
+ "async-graphql-actix-web",
+ "bcrypt",
+ "chrono",
+ "envfile",
+ "futures",
+ "jsonwebtoken",
+ "semver 0.11.0",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "slab",
+ "uuid",
+]
+
+[[package]]
 name = "backtrace"
 version = "0.3.53"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -647,6 +671,18 @@ dependencies = [
  "base64 0.13.0",
  "blowfish",
  "getrandom 0.2.0",
+]
+
+[[package]]
+name = "bin"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "futures",
+ "indicatif",
+ "reqwest",
+ "tokio",
 ]
 
 [[package]]
@@ -2058,42 +2094,6 @@ name = "pin-utils"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
-
-[[package]]
-name = "pix-bin"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "futures",
- "indicatif",
- "reqwest",
- "tokio",
-]
-
-[[package]]
-name = "pix-web-backend"
-version = "0.1.0"
-dependencies = [
- "actix-cors",
- "actix-files",
- "actix-rt",
- "actix-web",
- "actix-web-actors",
- "async-graphql",
- "async-graphql-actix-web",
- "bcrypt",
- "chrono",
- "envfile",
- "futures",
- "jsonwebtoken",
- "semver 0.11.0",
- "serde",
- "serde_derive",
- "serde_json",
- "slab",
- "uuid",
-]
 
 [[package]]
 name = "pkg-config"

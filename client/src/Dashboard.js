@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLazyQuery, useMutation } from "@apollo/react-hooks";
 import TerminalHeader from "./TermHead";
 import { v4 } from "uuid";
@@ -99,6 +99,7 @@ const GET_APP = gql`
 			maintainer
 			pgpKey
 			buildDate
+			address
 		}
 	}
 `;
@@ -113,8 +114,6 @@ const UPLOAD_MUTATION = gql`
 	}
 `;
 
-let s;
-
 export default function Dashboard() {
 	const [remove_app_state, setRemoveAppState] = useState(remove_template);
 	const [completed, execCmds] = useState([]);
@@ -122,37 +121,37 @@ export default function Dashboard() {
 	const [update_app_state, setUpdateAppState] = useState(update_template);
 	const [current_cmd, run_cmd] = useState(cmd_template);
 	const [extra_ui, setExtraUI] = useState(extra_ui_template);
-	const [file_state, setFile] = useState({});
+
 	const [upload] = useMutation(UPLOAD_MUTATION, {
 		onCompleted: (res) => {
 			if (res) {
-				let new_cmds = completed;
-				new_cmds.push({
-					...current_cmd,
-					res: `Succeed: ${JSON.stringify(res)}`,
-				});
-				execCmds([...new_cmds]);
-				run_cmd(cmd_template);
-				setRemoveAppState(remove_template);
+				// let new_cmds = completed;
+				// new_cmds.push({
+				// 	...current_cmd,
+				// 	res: `Succeed: ${JSON.stringify(res)}`,
+				// });
+				// execCmds([...new_cmds]);
+				// run_cmd(cmd_template);
+				console.log(res);
 			}
 		},
 		onError: (error) => {
 			if (error) {
-				let new_cmds = completed;
-				new_cmds.push({
-					...current_cmd,
-					error: true,
-					res: JSON.stringify(error),
-				});
-				execCmds([...new_cmds]);
-				run_cmd(cmd_template);
-				setExtraUI({ show: false, target: "" });
+				console.log(error);
+				// let new_cmds = completed;
+				// new_cmds.push({
+				// 	...current_cmd,
+				// 	error: true,
+				// 	res: JSON.stringify(error),
+				// });
+				// execCmds([...new_cmds]);
+				// run_cmd(cmd_template);
 			}
 		},
 	});
 
 	// Graphql
-	const [create_app, c_data] = useMutation(CREATE_APP, {
+	const [create_app] = useMutation(CREATE_APP, {
 		variables: {
 			...new_app_state,
 		},
@@ -168,7 +167,7 @@ export default function Dashboard() {
 			setExtraUI({ show: true, target: "update" });
 		},
 	});
-	const [removeMutation, MutationResult] = useMutation(REMOVE_APP, {
+	const [removeMutation] = useMutation(REMOVE_APP, {
 		variables: { ...remove_app_state },
 		onCompleted: (res) => {
 			if (res) {
@@ -184,9 +183,6 @@ export default function Dashboard() {
 		},
 	});
 	const [loadQuery] = useLazyQuery(GET_APP, {
-		variables: {
-			name: update_app_state.name,
-		},
 		onCompleted: (data) => {
 			let { __typename, ...others } = data.appByName;
 			setUpdateAppState({ ...others, targetName: others.name });
@@ -238,7 +234,11 @@ export default function Dashboard() {
 				break;
 			case "update":
 				setUpdateAppState({ ...update_app_state, name: appName });
-				loadQuery();
+				loadQuery({
+					variables: {
+						name: appName,
+					},
+				});
 
 				break;
 			default:
@@ -254,7 +254,6 @@ export default function Dashboard() {
 		}
 	};
 
-	useEffect(() => {}, [file_state]);
 	useEffect(() => {}, [remove_app_state]);
 	return (
 		<div
@@ -373,13 +372,9 @@ export default function Dashboard() {
 				<label>File Address</label>
 				<input
 					style={{ width: "100%" }}
+					disabled={true}
 					value={
 						extra_ui.target === "add" ? new_app_state.address : update_app_state.address
-					}
-					onChange={(e) =>
-						extra_ui.target === "add"
-							? setNewAppState({ ...new_app_state, address: e.target.value })
-							: setUpdateAppState({ ...update_app_state, address: e.target.value })
 					}
 				/>
 				<input
@@ -392,15 +387,25 @@ export default function Dashboard() {
 							validity,
 							files: [file],
 						},
-					}) =>
-						validity.valid &&
-						upload({ variables: { file } }).then((res) => {
-							setNewAppState({
-								...new_app_state,
-								address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+					}) => {
+						if (extra_ui.target === "add" && validity.valid) {
+							upload({ variables: { file } }).then((res) => {
+								setNewAppState({
+									...new_app_state,
+									address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+								});
 							});
-						})
-					}
+						}
+
+						if (extra_ui.target === "update" && validity.valid) {
+							upload({ variables: { file } }).then((res) => {
+								setUpdateAppState({
+									...update_app_state,
+									address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+								});
+							});
+						}
+					}}
 				/>
 
 				<label
@@ -478,7 +483,7 @@ export default function Dashboard() {
 						}
 					}}
 				>
-					{extra_ui.target == "add" ? "Create" : "Update"}
+					{extra_ui.target === "add" ? "Create" : "Update"}
 				</button>
 				<br />
 				<br />

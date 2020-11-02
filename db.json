@@ -1,12 +1,68 @@
 {
   "applications": [
     {
-      "name": "code",
-      "description": "ide",
-      "maintainer": "brilliatn",
+      "name": "firefox",
+      "description": "Web browser that is free and opensource.",
+      "maintainer": "PHAL Brilliant",
       "pgp_key": "",
-      "build_date": "20201101",
-      "address": "http://localhost:4000/public/applications/1024px-Rust_programming_language_black_logo.svg.png"
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/560.jpg"
+    },
+    {
+      "name": "chromium",
+      "description": "Web browser that is free and opensource.",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/560.jpg"
+    },
+    {
+      "name": "brave",
+      "description": "Web browser that is free and opensource.",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/560.jpg"
+    },
+    {
+      "name": "edge",
+      "description": "Proprietary browser by MS.",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/560.jpg"
+    },
+    {
+      "name": "vscode",
+      "description": "Code by MS",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/kisspng-computer-icons-book-library-paperback-book-library-5b2421cfa43e55.5568558715290946076728.jpg"
+    },
+    {
+      "name": "vim",
+      "description": "TUI Editor",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/kisspng-computer-icons-book-library-paperback-book-library-5b2421cfa43e55.5568558715290946076728.jpg"
+    },
+    {
+      "name": "nvim",
+      "description": "TUI Editor",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/kisspng-computer-icons-book-library-paperback-book-library-5b2421cfa43e55.5568558715290946076728.jpg"
+    },
+    {
+      "name": "atom",
+      "description": "OSS Editor",
+      "maintainer": "PHAL Brilliant",
+      "pgp_key": "",
+      "build_date": "20201102",
+      "address": "http://localhost:4000/public/applications/kisspng-computer-icons-book-library-paperback-book-library-5b2421cfa43e55.5568558715290946076728.jpg"
     }
   ],
   "version": "2020-10-28 12:18:33.541559725 UTC"

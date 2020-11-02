@@ -1,5 +1,6 @@
 [workspace]
 members = [
-    "pix-bin",
-    "pix-web-backend"
+    "bin",
+    "backend"
 ]
+default-members = ["bin"]

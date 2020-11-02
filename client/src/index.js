@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 // Apollo
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { createHttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 const { createUploadLink } = require("apollo-upload-client");
 
@@ -17,14 +16,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-// const httpLink = createHttpLink({
-// 	uri: "/",
-// 	headers: {
-// 		credentials: "same-origin",
-// 		"content-type": "application/json",
-// 		Authorization: window.sessionStorage.getItem("token") || "",
-// 	},
-// });
 const httpLink = createUploadLink({
 	uri: "/",
 	headers: {
