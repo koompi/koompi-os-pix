@@ -3,72 +3,18 @@
 // pub mod implements;
 // pub mod structs;
 // pub mod utils;
-pub mod graphql;
-use graphql_client::Error;
-use serde_json;
-use graphql::graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
-use serde_derive::{Serialize, Deserialize};
-#[derive(Debug,Serialize,Deserialize)]
-pub struct Response<T> {
-    pub data: Option<T>,
-    pub errors: Option<Error>
-}
+pub mod types;
+pub mod graph;
 
-#[derive(Debug,Serialize,Deserialize)]
-pub struct Version {
-    version: String
-}
+use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
 
-#[derive(Debug,Serialize,Deserialize)]
-pub struct Apps {
-    pub apps: Vec<App>
-}
-
-#[derive(Debug,Serialize,Deserialize)]
-pub struct App {
-    pub name: String,
-    pub description: String,
-    pub maintainer: String,
-    #[serde(rename="pgpKey")]
-    pub pgp_key: String,
-    #[serde(rename="buildDate")]
-    pub build_date: String,
-    pub address: String,
-}
-
-#[derive(Debug,Serialize,Deserialize)]
-pub struct AppByName {
-    #[serde(rename="appByName")]
-    pub app_by_name: App,
-}
-
-#[derive(Debug,Serialize,Deserialize)]
-pub struct AppByNames {
-    #[serde(rename="appByNames")]
-    pub app_by_names: Vec<App>,
-}
 
 #[tokio::main]
-async fn main() -> Result<(), failure::Error>{
-    // All Apps
-    // let all_apps = gql_all_apps().unwrap();
-    // let all_apps_data: Response<Apps> = serde_json::from_str(all_apps.as_str())?;
-    // println!("{:#?}", all_apps_data);
-
-    // App by name
-    // let app_by_name = gql_app_by_name("vscode".to_string())?;
-    // let app_by_name_data: Response<AppByName> = serde_json::from_str(app_by_name.as_str())?;
-    // println!("{:#?}", app_by_name_data);
-
-    // Many apps by name
-    // let apps_by_names = gql_apps_by_names(vec!["vscode".to_string(), "ato".to_string()])?;
-    // let apps_by_names_data: Response<AppByNames> = serde_json::from_str(apps_by_names.as_str())?;
-    // println!("{:#?}", apps_by_names_data);
-    
-    // Version
-    // let version = gql_db_version()?;
-    // let data: Response<Version> = serde_json::from_str(version.as_str()).unwrap();
-    // println!("{:#?}", data.data.unwrap().version);
+async fn main() -> Result<(), anyhow::Error>{
+    // println!("{:#?}", gql_all_apps()?);
+    // println!("{:#?}", gql_app_by_name("vscode".to_string())?);
+    // println!("{:#?}", gql_apps_by_names(vec!["vscode".to_string(), "atom".to_string()])?);
+    // println!("{:#?}", gql_db_version()?);
     Ok(())
 }
 

@@ -1,5 +1,7 @@
 use graphql_client::*;
 use reqwest;
+use super::types;
+use anyhow;
 #[derive(GraphQLQuery)]
 #[graphql(
     query_path = "../graphql/query_all_apps.graphql",
@@ -8,7 +10,7 @@ use reqwest;
 )]
 pub struct AllApps;
 
-pub fn gql_all_apps() -> Result<String, failure::Error> {
+pub fn gql_all_apps() -> Result<Option<types::Apps>, anyhow::Error> {
     let req = AllApps::build_query(all_apps::Variables);
 
     let client = reqwest::Client::new();
@@ -16,9 +18,16 @@ pub fn gql_all_apps() -> Result<String, failure::Error> {
     let response_body: Response<all_apps::ResponseData> = res.json()?;
 
     match serde_json::to_string_pretty(&response_body) {
-        Ok(s) => Ok(s),
-        Err(e) => Err(failure::Error::from(e))
+        Ok(s) => {
+            let all_apps_data: Response<types::Apps> = serde_json::from_str(s.as_str())?;
+            match all_apps_data.data {
+                Some(d) => Ok(Some(d)),
+                None => Ok(None)
+            }
+        },
+        Err(e) => Err(anyhow::Error::from(e))
     }
+    
 }
 
 #[derive(GraphQLQuery)]
@@ -29,7 +38,7 @@ pub fn gql_all_apps() -> Result<String, failure::Error> {
 )]
 pub struct AppByName;
 
-pub fn gql_app_by_name(name: String) -> Result<String, failure::Error> {
+pub fn gql_app_by_name(name: String) -> Result<Option<types::AppByName>, anyhow::Error> {
     let req = AppByName::build_query(app_by_name::Variables { name: name.clone() });
 
     let client = reqwest::Client::new();
@@ -38,9 +47,13 @@ pub fn gql_app_by_name(name: String) -> Result<String, failure::Error> {
 
     match serde_json::to_string_pretty(&response_body) {
         Ok(s) => {
-            Ok(s)
+            let app_by_name_data: Response<types::AppByName> = serde_json::from_str(s.as_str())?;
+            match app_by_name_data.data {
+                Some(data) => Ok(Some(data)),
+                None => Ok(None)
+            }
         },
-        Err(e) => Err(failure::Error::from(e))
+        Err(e) => Err(anyhow::Error::from(e))
     }
 }
 
@@ -52,7 +65,7 @@ pub fn gql_app_by_name(name: String) -> Result<String, failure::Error> {
 )]
 pub struct AppsByNames;
 
-pub fn gql_apps_by_names(names: Vec<String>) -> Result<String, failure::Error> {
+pub fn gql_apps_by_names(names: Vec<String>) -> Result<Option<types::AppByNames>, anyhow::Error> {
     let req = AppsByNames::build_query(apps_by_names::Variables { names: names.clone()});
 
     let client = reqwest::Client::new();
@@ -60,8 +73,14 @@ pub fn gql_apps_by_names(names: Vec<String>) -> Result<String, failure::Error> {
     let response_body: Response<apps_by_names::ResponseData> = res.json()?;
 
     match serde_json::to_string_pretty(&response_body) {
-        Ok(s) => Ok(s),
-        Err(e) => Err(failure::Error::from(e))
+        Ok(s) => {
+            let apps_by_names_data: Response<types::AppByNames> = serde_json::from_str(s.as_str())?;
+            match apps_by_names_data.data {
+                Some(d) => Ok(Some(d)),
+                None => Ok(None)
+            }
+        }
+        Err(e) => Err(anyhow::Error::from(e))
     }
 }
 
@@ -73,7 +92,7 @@ pub fn gql_apps_by_names(names: Vec<String>) -> Result<String, failure::Error> {
 )]
 pub struct DBVersion;
 
-pub fn gql_db_version() -> Result<String, failure::Error> {
+pub fn gql_db_version() -> Result<Option<types::Version>, anyhow::Error> {
     let req = DBVersion::build_query(db_version::Variables);
 
     let client = reqwest::Client::new();
@@ -81,7 +100,19 @@ pub fn gql_db_version() -> Result<String, failure::Error> {
     let response_body: Response<db_version::ResponseData> = res.json()?;
 
     match serde_json::to_string_pretty(&response_body) {
-        Ok(s) => Ok(s),
-        Err(e) => Err(failure::Error::from(e))
+        Ok(s) => {
+            let data: Response<types::Version> = serde_json::from_str(s.as_str())?;
+            match data.data {
+                Some(d) => Ok(Some(d)),
+                None => Ok(None)
+            }
+        },
+        Err(e) => Err(anyhow::Error::from(e))
     }
+
+        // Version
+
+    // let version = gql_db_version()?;
+    // let data: Response<Version> = serde_json::from_str(version.as_str()).unwrap();
+    // println!("{:#?}", data.data.unwrap().version);
 }
