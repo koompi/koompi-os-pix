@@ -1,0 +1,55 @@
+schema {
+  query: QueryRoot
+  mutation: MutationRoot
+}
+
+# Directs the executor to query only when the field exists.
+directive @ifdef on FIELD
+
+type Application {
+  name: String!
+  description: String!
+  maintainer: String!
+  pgpKey: String!
+  buildDate: String!
+  address: String!
+}
+
+type FileInfo {
+  id: ID!
+  filename: String!
+  mimetype: String
+}
+
+type MutationRoot {
+  add(
+    name: String!
+    description: String!
+    maintainer: String!
+    pgpKey: String!
+    buildDate: String!
+    address: String!
+  ): Application!
+  update(
+    targetName: String!
+    name: String!
+    description: String!
+    maintainer: String!
+    pgpKey: String!
+    buildDate: String!
+    address: String!
+  ): Application!
+  remove(name: String!): Application!
+  signup(email: String!, password: String!): String!
+  signin(email: String!, password: String!): String!
+  singleUpload(file: Upload!): FileInfo!
+}
+
+type QueryRoot {
+  apps: [Application!]!
+  appByName(name: String!): Application!
+  appByNames(names: [String!]!): [Application!]!
+  version: String!
+}
+
+scalar Upload
