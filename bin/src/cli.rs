@@ -7,7 +7,7 @@ use clap::{App, Arg, SubCommand};
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 const AUTHOR: &'static str = env!("CARGO_PKG_AUTHORS");
 
-pub fn command_line_interface<'a, 'b>() -> App<'a, 'b> {
+pub fn cmd_args<'a, 'b>() -> App<'a, 'b> {
     App::new("pix")
         .version(VERSION)
         .author(AUTHOR)

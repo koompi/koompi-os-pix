@@ -4,7 +4,7 @@ use reqwest::{header, Client};
 use std::path::Path;
 use tokio::{fs, io::AsyncWriteExt};
 
-#[tokio::main]
+// #[tokio::main]
 pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<(), anyhow::Error> {
     let client = Client::new();
 

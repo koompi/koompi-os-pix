@@ -40,3 +40,14 @@ pub struct AppByNames {
     pub app_by_names: Vec<App>,
 }
 
+#[derive(Debug)]
+pub enum Operation {
+    Install,
+    Update,
+    Remove,
+    Search,
+    Help,
+    List,
+    Fix,
+}
+
