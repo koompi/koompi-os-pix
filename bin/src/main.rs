@@ -1,24 +1,21 @@
-// Import modules
+#![allow(dead_code, unused_variables, unused_imports)]
 pub mod cli;
-// pub mod implements;
-// pub mod structs;
-pub mod utils;
 pub mod types;
 pub mod graph;
+pub mod config;
+pub mod fd;
+pub mod install;
+pub mod download;
+pub mod extract;
 
-use utils::download::download;
+use download::download;
 use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
 use cli::cmd_args;
 use types::Operation;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error>{
-    // println!("{:#?}", gql_all_apps()?);
-    // println!("{:#?}", gql_app_by_name("vscode".to_string())?);
-    // println!("{:#?}", gql_apps_by_names(vec!["vscode".to_string(), "atom".to_string()])?);
-    // println!("{:#?}", gql_db_version()?);
-
-
+    config::configure();
     let pix = cmd_args();
     let matches = pix.clone().get_matches();
 
@@ -46,21 +43,8 @@ async fn main() -> Result<(), anyhow::Error>{
         Operation::Install => {
             let args_list = matches.values_of("install").unwrap().collect::<Vec<_>>();
             let mut search_list: Vec<String> = Vec::new();
-            for arg in args_list.iter() {
-                search_list.push(arg.to_string());
-            }
-            let data = gql_apps_by_names(search_list).await?;
-            match data {
-                Some(d) => {
-                    for app in d.app_by_names.iter() {
-                        let split_address: Vec<&str> = app.clone().address.split('/').collect();
-                        let file_name = split_address.last().unwrap();
-                        let file_path = format!("output/{}",file_name);
-                        download(file_path.as_str(), &app.name, &app.address).await?
-                    }
-                },
-                None => println!("No app specified...")
-            }
+            args_list.iter().for_each(|arg| search_list.push(arg.to_string()));
+            install::install(search_list).await?;
         }
         Operation::Update => {
             // registry.update(&mut local_db);
@@ -102,10 +86,3 @@ async fn main() -> Result<(), anyhow::Error>{
 
     Ok(())
 }
-
-
-
-
-    // block_on(install());
-
-    // Ok(())
