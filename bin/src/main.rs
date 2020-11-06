@@ -1,20 +1,20 @@
 #![allow(dead_code, unused_variables, unused_imports)]
 pub mod cli;
-pub mod types;
-pub mod graph;
 pub mod config;
-pub mod fd;
-pub mod install;
+pub mod db;
 pub mod download;
 pub mod extract;
+pub mod fd;
+pub mod graph;
+pub mod install;
+pub mod types;
 
-use download::download;
-use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
 use cli::cmd_args;
+use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
 use types::Operation;
 
 #[tokio::main]
-async fn main() -> Result<(), anyhow::Error>{
+async fn main() -> Result<(), anyhow::Error> {
     config::configure();
     let pix = cmd_args();
     let matches = pix.clone().get_matches();
@@ -43,7 +43,9 @@ async fn main() -> Result<(), anyhow::Error>{
         Operation::Install => {
             let args_list = matches.values_of("install").unwrap().collect::<Vec<_>>();
             let mut search_list: Vec<String> = Vec::new();
-            args_list.iter().for_each(|arg| search_list.push(arg.to_string()));
+            args_list
+                .iter()
+                .for_each(|arg| search_list.push(arg.to_string()));
             install::install(search_list).await?;
         }
         Operation::Update => {
@@ -75,7 +77,6 @@ async fn main() -> Result<(), anyhow::Error>{
         //         apps.push(*arg);
         //     }
         //     registry.search_papps(apps);
-            
         // }
         _ => {
             let helper = pix.clone().print_help();

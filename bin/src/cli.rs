@@ -1,4 +1,4 @@
-use clap::{App, Arg, SubCommand};
+use clap::{App, Arg};
 
 // This function does:
 // Declare argument list and specs

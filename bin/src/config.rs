@@ -1,4 +1,4 @@
-use std::{env, path::{PathBuf, Path}, io::ErrorKind};
+use std::{env, path::PathBuf};
 use super::fd::create_dir;
 
 pub fn configure() {

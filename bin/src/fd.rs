@@ -1,8 +1,8 @@
 use std::env::temp_dir;
 use std::{  
     fs::File,
-    io::{prelude::*, BufReader, BufWriter, Error, ErrorKind},
-    path::{Path, PathBuf},
+    io::{prelude::*, Error, ErrorKind},
+    path::PathBuf,
     str,
     env,
 };
@@ -16,7 +16,7 @@ pub fn r_file(file_name: &str) -> Result<String, Error> {
         Ok(mut file) => {
             let mut buffer = String::from("");
             match file.read_to_string(&mut buffer) {
-                Ok(d) => Ok(buffer),
+                Ok(_) => Ok(buffer),
                 Err(e) => Err(e),
             }
         }

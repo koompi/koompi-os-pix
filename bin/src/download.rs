@@ -32,7 +32,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
             .template(&format!(
                 "{app} {bar}",
                 app = app_name,
-                bar = "{wide_msg}{spinner} [{bar:60.green/blue}] {percent:>3}% {total_bytes:>10}"
+                bar = "{wide_msg}[{bar:60.green/blue}] {percent:>3}% {total_bytes:>10}"
             ))
             .progress_chars("#>-"),
     );
@@ -51,6 +51,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
         .append(true)
         .open(&file)
         .await?;
+        
     while let Some(chunk) = source.chunk().await? {
         dest.write_all(&chunk).await?;
         pb.inc(chunk.len() as u64);
@@ -58,10 +59,3 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
     pb.finish();
     Ok(())
 }
-
-// Download
-// download(
-//     "koompi-themes_20200309.tar.gz",
-//     "koompi-themes",
-//     "http://repo.koompi.org/pix/koompi-themes_20200309.tar.gz",
-// )?;
