@@ -3,9 +3,9 @@
 ## CLI
 ```
 [x] Download
-[ ] API Query
-[ ] Extract
-[ ] Version
+[x] API Query
+[x] Extract
+[x] Version
 [ ] Update
 [ ] List
 [ ] Fix
@@ -16,39 +16,39 @@
 
 Create GraphQL endpoint
 ```
-[ ] db_version
+[x] db_version
 [ ] apps
-[ ] app_by_name
+[x] app_by_name
 [ ] fixes
 [ ] fix_by_name
-[ ] login
-[ ] upload
+[x] login
+[x] upload
 ```
 Database
 ```
-[ ] generate db.json
-[ ] read db.json
-[ ] db.find()
-[ ] db.find_one()
-[ ] db.find_one_and_update()
-[ ] db.find_one_and_remove()
-[ ] db.save()
+[x] generate db.json
+[x] read db.json
+[x] db.find()
+[x] db.find_one()
+[x] db.find_one_and_update()
+[x] db.find_one_and_remove()
+[x] db.save()
 ```
 Authentication
 ```
-[ ] jwt
-[ ] hash_password
+[x] jwt
+[x] hash_password
 ```
 ## Front-end
 
 Pages
 ```
-[ ] /
-[ ] /about
-[ ] /packages
-[ ] /packages/name
+[x] /
+[x] /about
+[x] /packages
+[x] /packages/name
 [ ] /fixes
 [ ] /fixes/name
-[ ] /login
-[ ] /authenticated/dashboard
+[x] /login
+[x] /authenticated/dashboard
 ```

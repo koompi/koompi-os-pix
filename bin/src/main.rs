@@ -6,20 +6,22 @@ pub mod download;
 pub mod extract;
 pub mod fd;
 pub mod graph;
-pub mod install;
+// pub mod install;
 pub mod types;
 
 use cli::cmd_args;
+use db::Database;
 use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
 use types::Operation;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    config::configure();
+    // Get all application configurations
+    let get_config = config::configure();
+    let db_path: String = format!("{}/db.json", get_config.db_dir);
+    let mut db = Database::from(&db_path);
     let pix = cmd_args();
     let matches = pix.clone().get_matches();
-
-    let mut apps: Vec<&str> = Vec::new();
 
     // Check for given operation variants from user input
     let op = if matches.is_present("install") {
@@ -46,17 +48,17 @@ async fn main() -> Result<(), anyhow::Error> {
             args_list
                 .iter()
                 .for_each(|arg| search_list.push(arg.to_string()));
-            install::install(search_list).await?;
+            db.install(get_config, search_list).await?;
         }
-        Operation::Update => {
-            // registry.update(&mut local_db);
-        }
+        Operation::Update => db.update(get_config).await?,
         Operation::Remove => {
             let args_list = matches.values_of("remove").unwrap().collect::<Vec<_>>();
-            for arg in args_list.iter() {
-                apps.push(*arg);
-            }
-            // registry.remove(apps);
+            let remove_list: Vec<String> = args_list
+                .iter()
+                .map(|arg| arg.clone().to_string())
+                .collect();
+            let db_file = format!("{}/db.json", get_config.db_dir);
+            db.remove(get_config, remove_list).save(&db_file)?
         }
         Operation::Search => {
             let args_list = matches.values_of("search").unwrap().collect::<Vec<_>>();
@@ -65,19 +67,10 @@ async fn main() -> Result<(), anyhow::Error> {
                 search_list.push(arg.to_string());
             }
             println!("{:#?}", gql_apps_by_names(search_list).await?);
-
-            // registry.search_papps(apps);
         }
         Operation::List => {
             println!("{:#?}", gql_all_apps().await?);
         }
-        // Operation::Fix => {
-        //     let args_list = matches.values_of("search").unwrap().collect::<Vec<_>>();
-        //     for arg in args_list.iter() {
-        //         apps.push(*arg);
-        //     }
-        //     registry.search_papps(apps);
-        // }
         _ => {
             let helper = pix.clone().print_help();
             helper.unwrap();
