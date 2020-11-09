@@ -1,6 +1,4 @@
 use super::fd::create_dir;
-use std::os::unix::process::CommandExt;
-use std::process::Command;
 use std::{env, path::PathBuf};
 
 #[derive(Debug)]

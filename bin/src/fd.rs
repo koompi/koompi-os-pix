@@ -1,7 +1,5 @@
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
-use std::env::temp_dir;
 use std::{
-    env,
     fmt::Debug,
     fs::File,
     io::{prelude::*, Error, ErrorKind},
@@ -69,7 +67,6 @@ pub fn create_dir(path: PathBuf) {
                 match e.kind() {
                     ErrorKind::PermissionDenied => {
                         // If error because of permission denied then restart the program with sudo
-                        use std::os::unix::process::CommandExt;
                         use std::process::Command;
                         println!("Creating {}", path.clone().display());
                         Command::new("sudo")

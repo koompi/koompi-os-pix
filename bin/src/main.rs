@@ -1,4 +1,4 @@
-#![allow(dead_code, unused_variables, unused_imports)]
+// #![allow(dead_code, unused_variables, unused_imports)]
 pub mod cli;
 pub mod config;
 pub mod db;
@@ -6,12 +6,11 @@ pub mod download;
 pub mod extract;
 pub mod fd;
 pub mod graph;
-// pub mod install;
 pub mod types;
 
 use cli::cmd_args;
 use db::Database;
-use graph::{gql_all_apps, gql_app_by_name, gql_apps_by_names, gql_db_version};
+use graph::{gql_all_apps, gql_apps_by_names};
 use types::Operation;
 
 #[tokio::main]
@@ -58,7 +57,7 @@ async fn main() -> Result<(), anyhow::Error> {
                 .map(|arg| arg.clone().to_string())
                 .collect();
             let db_file = format!("{}/db.json", get_config.db_dir);
-            db.remove(get_config, remove_list).save(&db_file)?
+            db.remove(remove_list).save(&db_file)?
         }
         Operation::Search => {
             let args_list = matches.values_of("search").unwrap().collect::<Vec<_>>();

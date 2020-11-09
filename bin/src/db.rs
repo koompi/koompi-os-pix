@@ -1,13 +1,16 @@
-use super::config::Conf;
-use super::download::download;
-use super::extract::extract;
-use super::fd::{r_file, w_file};
-use super::graph::gql_apps_by_names;
+use super::{
+    config::Conf,
+    download::download,
+    extract::extract,
+    fd::{r_file, w_file},
+    graph::gql_apps_by_names,
+};
 use serde_derive::{Deserialize, Serialize};
-use std::env;
-use std::io::{self, Error, ErrorKind, Write};
-use std::path::Path;
-use std::process::{Command, Stdio};
+use std::{
+    io::{self, Error, ErrorKind, Write},
+    process::{Command, Stdio},
+};
+
 #[derive(Debug, Clone)]
 struct ProcessData {
     pub name: String,
@@ -182,15 +185,15 @@ impl Database {
         index
     }
 
-    fn update_one(&mut self, name: String, data: Package) -> &Self {
-        match self.find_one_index(name) {
-            Some(p) => {
-                self.packages[p] = data;
-                self
-            }
-            None => self,
-        }
-    }
+    // fn update_one(&mut self, name: String, data: Package) -> &Self {
+    //     match self.find_one_index(name) {
+    //         Some(p) => {
+    //             self.packages[p] = data;
+    //             self
+    //         }
+    //         None => self,
+    //     }
+    // }
 
     pub async fn update(&self, conf: Conf) -> Result<(), anyhow::Error> {
         let installed_app: Vec<String> = self.packages.iter().map(|p| p.name.clone()).collect();
@@ -227,7 +230,7 @@ impl Database {
         }
     }
 
-    pub fn remove(&mut self, conf: Conf, names: Vec<String>) -> &Self {
+    pub fn remove(&mut self, names: Vec<String>) -> &Self {
         names.iter().for_each(|n| {
             self.packages.iter().for_each(|p| {
                 if p.name == n.to_string() {
