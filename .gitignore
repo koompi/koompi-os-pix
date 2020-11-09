@@ -1,1 +1,6 @@
-test/
+**/target/
+*.tar.gz
+.env
+public/
+output/
+fakeroot/

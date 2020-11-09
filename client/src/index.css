@@ -1,0 +1,376 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
+
+html {
+	min-width: 100vw;
+	max-width: 100vw;
+	min-height: 100vh;
+}
+
+body {
+	min-width: 100vw;
+	max-width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 20 !important;
+	font-family: "Fira Code", monospace;
+	color: green;
+}
+
+* {
+	box-sizing: border-box;
+	font-weight: 500;
+	vertical-align: text-top;
+	letter-spacing: 0.01rem;
+	background: rgb(0, 0, 0);
+	font-family: "Fira Code", monospace;
+	outline: none;
+	font-smooth: always;
+	font-smooth: 10em;
+}
+
+#root {
+	min-width: 80vw;
+	max-width: 80vw;
+	min-height: 90vh;
+	max-height: 90vh;
+	position: absolute;
+	top: 5vh;
+	left: 10vw;
+	z-index: 0;
+	border: cyan 2px solid;
+	overflow-x: hidden;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+.home_header {
+	padding: 0.5rem 1rem;
+	line-height: 1.6rem;
+}
+
+.pix {
+	font-weight: 600;
+}
+.AppContainer {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: relative;
+}
+
+a {
+	font-weight: 500;
+	color: green;
+}
+input,
+textarea,
+#upload_btn,
+#submit_btn,
+#modal_btn {
+	height: 30px;
+	line-height: 1.4rem;
+	border: 2px solid green;
+	color: green;
+}
+.box {
+	width: 100%;
+	height: auto;
+	min-height: 100px;
+	margin-top: 10px;
+	border: green 2px solid;
+	padding: 1rem;
+	display: grid;
+	grid-template-columns: 90% 1fr;
+	align-content: center;
+}
+
+.cp_btn {
+	border: green 2px solid;
+	font-size: 1.2rem;
+	background: black;
+	cursor: pointer;
+	color: green;
+}
+
+.App {
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	padding-top: 2rem;
+	overflow-x: hidden;
+}
+.pageContainer {
+	height: calc(100% - 50px);
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+/* Terminal */
+.terminal {
+	font-weight: 500;
+}
+.host {
+	color: purple;
+}
+
+.at {
+	color: coral;
+}
+
+.user {
+	color: crimson;
+}
+.path {
+	color: darkcyan;
+}
+
+/* Tab */
+.tab_bar {
+	width: 100%;
+	height: 50px;
+	border: cyan 1px solid;
+	border-bottom: 2px solid cyan;
+	border-left: none;
+	border-right: none;
+	text-align: left;
+	margin: 0;
+	margin-top: -1px;
+	padding: 0;
+	position: relative;
+}
+
+.nav {
+	height: 51px;
+	margin-top: -2px;
+	line-height: 51px;
+	float: left;
+	cursor: pointer;
+	border: none;
+	border-top: 2px solid cyan;
+	border-bottom: 2px solid cyan;
+	border-left: 0px solid cyan;
+	border-right: 2px solid cyan;
+	padding: 0px 25px;
+	text-decoration: none;
+}
+
+.active {
+	border-bottom: 2px solid black !important;
+}
+
+/* typing animation */
+.css-typing {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+.css-typing p {
+	border-right: 1rem solid green;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.css-typing p.command {
+	width: 7.1em;
+	-webkit-animation: type 1000ms steps(10, end);
+	animation: type 1000ms steps(10, end);
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+@keyframes type {
+	0% {
+		width: 0;
+	}
+	1% {
+		opacity: 1;
+	}
+	99.9% {
+		border-right: 1rem solid green;
+	}
+	100% {
+		opacity: 1;
+		border: none;
+	}
+}
+
+@-webkit-keyframes type {
+	0% {
+		width: 0;
+	}
+	1% {
+		opacity: 1;
+	}
+	99.9% {
+		border-right: 1rem solid green;
+	}
+	100% {
+		opacity: 1;
+		border: none;
+	}
+}
+
+/* Enter effect */
+.entered {
+	animation-name: show;
+	animation-duration: 1100ms;
+}
+
+@keyframes show {
+	0% {
+		visibility: hidden;
+	}
+	99% {
+		visibility: hidden;
+	}
+	100% {
+		visibility: visible;
+	}
+}
+.popup {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: black;
+	display: grid;
+	grid-template-columns: 25% 1fr 25%;
+	grid-template-rows: 25% 1fr 25%;
+}
+.modal {
+	width: 100%;
+	height: 100%;
+	grid-column: 2/3;
+	grid-row: 2/3;
+	border: 2px solid green;
+	padding: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+.modal p.label {
+	grid-column: 1/2;
+}
+
+.modal p.info {
+	grid-column: 2/3;
+}
+
+.modal button {
+	grid-column: 1/3;
+}
+
+.packages,
+.list-item {
+	display: grid;
+	grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 10px;
+}
+
+.list-item {
+	grid-column: 1/7;
+}
+.message,
+.filter {
+	grid-column: 1/7;
+}
+.list-no {
+	grid-column: 1/2;
+}
+.list-name {
+	grid-column: 2/3;
+}
+.list-install {
+	grid-column: 3/5;
+}
+.list-action {
+	grid-column: 5/7;
+}
+
+@media only screen and (max-width: 1024px) {
+	#root {
+		max-width: 90vw;
+		min-width: 90vw;
+		min-height: calc(96vh - 20px);
+		max-height: calc(96vh - 20px);
+		left: 5vw;
+		top: calc(2vh + 10px);
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	#root {
+		max-width: calc(100vw - 20px);
+		min-width: calc(100vw - 20px);
+		min-height: calc(100vh - 20px);
+		max-height: calc(100vh - 20px);
+		left: 10px;
+		top: 10px;
+	}
+	.packages > div.list-action {
+		display: none;
+	}
+	.packages > div.list-name {
+		grid-column: 2/4;
+	}
+	.packages > div.list-install {
+		grid-column: 4/7;
+	}
+	.list-item > div.list-action {
+		grid-column: 1/7;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+	.list-item > div.list-install {
+		grid-column: 4/7;
+	}
+	.popup {
+		grid-template-columns: 10% 1fr 10%;
+	}
+	.box {
+		grid-template-columns: 1fr;
+		grid-gap: 20px;
+		text-align: center;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	#root {
+		max-width: calc(100vw - 20px);
+		min-width: calc(100vw - 20px);
+		min-height: calc(100vh - 20px);
+		max-height: calc(100vh - 20px);
+		left: 10px;
+		top: 10px;
+	}
+	.packages > div.list-action {
+		display: none;
+	}
+	.packages > div.list-name {
+		grid-column: 2/4;
+	}
+	.packages > div.list-install {
+		grid-column: 4/7;
+	}
+	.list-item > div.list-action {
+		grid-column: 1/7;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+	.list-item > div.list-install {
+		grid-column: 4/7;
+	}
+	.popup {
+		grid-template-columns: 2% 1fr 2%;
+	}
+	.box {
+		grid-template-columns: 1fr;
+		grid-gap: 20px;
+		text-align: center;
+	}
+}

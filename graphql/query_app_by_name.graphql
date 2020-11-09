@@ -1,0 +1,10 @@
+query AppByName($name: String!) {
+	appByName(name: $name) {
+		name
+		description
+		maintainer
+		pgpKey
+		buildDate
+		address
+	}
+}

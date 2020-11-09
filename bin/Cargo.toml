@@ -1,0 +1,24 @@
+[package]
+name = "bin"
+version = "1.0.0-alpha"
+authors = ["mrrbrilliant <mrrbrilliantwork@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.33"
+indicatif = "0.15.0"
+reqwest = { version = "0.10.8", features=["json", "blocking"] }
+tokio = { version = "0.2.22", features = ["macros", "fs"] }
+clap = "2.33.3"
+futures = "0.3"
+graphql_client = "0.9.0"
+log = "0.4.11"
+serde = "1.0.117"
+serde_derive = "1.0.117"
+serde_json = "1.0.59"
+failure = "0.1.8"
+flate2 = "1.0.19"
+tar = "0.4.30"
+colored = "2.0.0"

@@ -1,0 +1,10 @@
+query AllApps {
+	apps {
+		name
+		description
+		maintainer
+		pgpKey
+		buildDate
+		address
+	}
+}
