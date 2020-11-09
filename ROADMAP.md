@@ -6,8 +6,8 @@
 [x] API Query
 [x] Extract
 [x] Version
-[ ] Update
-[ ] List
+[x] Update
+[x] List
 [ ] Fix
 [x] Help
 ```
@@ -17,7 +17,7 @@
 Create GraphQL endpoint
 ```
 [x] db_version
-[ ] apps
+[x] apps
 [x] app_by_name
 [ ] fixes
 [ ] fix_by_name

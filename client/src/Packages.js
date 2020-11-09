@@ -99,7 +99,7 @@ export default function Packages() {
 						<div className="list-item" key={Uuidv4()}>
 							<div className="list-no">{i + 1}</div>
 							<div className="list-name">{app.name}</div>
-							<div className="list-install">pix install {app.name}</div>
+							<div className="list-install">pix -i {app.name}</div>
 							<div className="list-action">
 								<CopyToClipboard text={`pix install ${app.name}`}>
 									<button style={action_btn}>Copy</button>
@@ -123,50 +123,6 @@ export default function Packages() {
 						</div>
 					))}
 
-					{/* <table
-						style={{
-							width: "100%",
-							textAlign: "left",
-						}}
-					>
-						<thead>
-							<tr>
-								<th>No</th>
-								<th>Name</th>
-								<th>Install</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{appState.map((app, i) => (
-								<tr key={Uuidv4()}>
-									<td>{i + 1}</td>
-									<td>{app.name}</td>
-									<td>pix install {app.name}</td>
-									<td>
-										<CopyToClipboard text={`pix install ${app.name}`}>
-											<button style={action_btn}>Copy</button>
-										</CopyToClipboard>
-										<button
-											style={action_btn}
-											onClick={(e) => {
-												setSelected({ ...app });
-												toggle();
-											}}
-										>
-											Info
-										</button>
-										<button
-											style={action_btn}
-											onClick={(e) => window.open(`${app.address}`)}
-										>
-											Download
-										</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table> */}
 				</div>
 				{model ? <Modal data={selected} toggle={toggle} show={model} /> : ""}
 			</div>
