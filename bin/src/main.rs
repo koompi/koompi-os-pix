@@ -33,9 +33,11 @@ async fn main() -> Result<(), anyhow::Error> {
         Operation::Search
     } else if matches.is_present("list") {
         Operation::List
-    } else if matches.is_present("fix") {
-        Operation::Fix
-    } else {
+    }
+    // else if matches.is_present("fix") {
+    //     Operation::Fix
+    // }
+    else {
         Operation::Help
     };
 

@@ -47,12 +47,12 @@ pub fn cmd_args<'a, 'b>() -> App<'a, 'b> {
                 .short("l")
                 .long("list"),
         )
-        .arg(
-            Arg::with_name("fix")
-                .help("Fix system issues")
-                .short("f")
-                .long("fix")
-                .takes_value(true)
-                .multiple(true),
-        )
+    // .arg(
+    //     Arg::with_name("fix")
+    //         .help("Fix system issues")
+    //         .short("f")
+    //         .long("fix")
+    //         .takes_value(true)
+    //         .multiple(true),
+    // )
 }
