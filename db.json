@@ -5,7 +5,7 @@
       "description": "PDF editor",
       "maintainer": "Brilliant PHAL",
       "pgp_key": "",
-      "build_date": "20201105",
+      "build_date": "20201109",
       "address": "http://localhost:4000/public/applications/master-pdf-editor5_20200602.tar.gz"
     },
     {

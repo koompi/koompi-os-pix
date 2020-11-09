@@ -30,7 +30,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
     pb.set_style(
         ProgressStyle::default_bar()
             .template(&format!(
-                "{app} {bar}",
+                "=> {app} {bar}",
                 app = app_name,
                 bar = "{wide_msg}[{bar:60.green/blue}] {percent:>3}% {total_bytes:>10}"
             ))
@@ -51,7 +51,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
         .append(true)
         .open(&file)
         .await?;
-        
+
     while let Some(chunk) = source.chunk().await? {
         dest.write_all(&chunk).await?;
         pb.inc(chunk.len() as u64);

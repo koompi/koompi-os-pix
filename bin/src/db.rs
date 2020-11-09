@@ -5,6 +5,7 @@ use super::{
     fd::{r_file, w_file},
     graph::gql_apps_by_names,
 };
+use colored::Colorize;
 use serde_derive::{Deserialize, Serialize};
 use std::{
     io::{self, Error, ErrorKind, Write},
@@ -84,19 +85,20 @@ impl Database {
                     });
                 }
 
-                println!("\nDownloading packages...");
+                println!("\n{}", "Downloading:".blue().bold());
                 for app in process_data.iter() {
                     download(&app.disk_src, &app.name, &app.web_src).await?
                 }
 
-                println!("\nExtracting packages...");
+                println!("\n{}", "Extracting:".blue().bold());
                 for app in process_data.iter_mut() {
                     extract(&app.name, &app.disk_src, &app.dest)?;
                     app.dest = format!("{}{}", app.dest, app.name);
                 }
 
-                println!("\nInstalling packages...");
+                println!("\n{}", "Installing:".blue().bold());
                 for app in process_data.iter() {
+                    println!("=> {}", app.name);
                     let cmd = Command::new("sh")
                         .current_dir(&app.dest)
                         .arg("installer.sh")
@@ -118,12 +120,10 @@ impl Database {
                         Err(e) => println!("{}", e),
                     }
                 }
-
-                println!("\nUpdating transactions...");
                 self.add(data_for_db)
                     .save(&format!("{}/db.json", conf.db_dir))
                     .unwrap();
-                println!("\nInstallation completed.\n");
+                println!("\n{}", "Installation completed.".green().bold());
             }
             None => println!("No app specified..."),
         }
@@ -196,6 +196,7 @@ impl Database {
     // }
 
     pub async fn update(&self, conf: Conf) -> Result<(), anyhow::Error> {
+        println!("\n{}", "Checking for updates:".yellow().bold());
         let installed_app: Vec<String> = self.packages.iter().map(|p| p.name.clone()).collect();
         let mut reinstall_target: Vec<String> = Vec::new();
         let data = gql_apps_by_names(installed_app.clone()).await?;
@@ -224,16 +225,32 @@ impl Database {
         }
 
         if !reinstall_target.is_empty() {
+            let u: String = if reinstall_target.len() > 1 {
+                String::from("updates")
+            } else {
+                String::from("update")
+            };
+            println!(
+                "{} {} {}{}",
+                "Found".green(),
+                reinstall_target.len().to_string().green(),
+                u.green(),
+                ":".green()
+            );
+            println!("{}", reinstall_target.join(" "));
             self.clone().install(conf, reinstall_target).await
         } else {
+            println!("{}", "No updates available.".green().bold());
             Ok(())
         }
     }
 
     pub fn remove(&mut self, names: Vec<String>) -> &Self {
+        println!("\n{}", "Unstalling:".red().bold());
         names.iter().for_each(|n| {
             self.packages.iter().for_each(|p| {
                 if p.name == n.to_string() {
+                    println!("=> {}", n.to_string());
                     let cmd = Command::new("sh")
                         .arg(&p.uninstaller)
                         .stderr(Stdio::piped())
@@ -248,6 +265,7 @@ impl Database {
         names
             .iter()
             .for_each(|n| self.packages.retain(|p| p.name != n.to_string()));
+        println!("\n{}", "Unstallation completed.".green().bold());
         self
     }
 

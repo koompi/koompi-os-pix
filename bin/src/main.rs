@@ -6,11 +6,13 @@ pub mod download;
 pub mod extract;
 pub mod fd;
 pub mod graph;
+pub mod list;
 pub mod types;
 
 use cli::cmd_args;
 use db::Database;
 use graph::{gql_all_apps, gql_apps_by_names};
+use list::list_online;
 use types::Operation;
 
 #[tokio::main]
@@ -67,10 +69,44 @@ async fn main() -> Result<(), anyhow::Error> {
             for arg in args_list.iter() {
                 search_list.push(arg.to_string());
             }
-            println!("{:#?}", gql_apps_by_names(search_list).await?);
+            println!();
+            let data = gql_apps_by_names(search_list).await?;
+            match data {
+                Some(d) => {
+                    list_online(
+                        true,
+                        "Name".to_string(),
+                        "Installation".to_string(),
+                        "Description".to_string(),
+                    );
+                    d.app_by_names.iter().for_each(|app| {
+                        let cmd = format!("pix -i {}", app.name);
+                        list_online(false, app.name.clone(), cmd, app.description.clone());
+                    })
+                }
+                None => println!("No apps found."),
+            }
+            println!();
         }
         Operation::List => {
-            println!("{:#?}", gql_all_apps().await?);
+            println!();
+            let data = gql_all_apps().await?;
+            match data {
+                Some(d) => {
+                    list_online(
+                        true,
+                        "Name".to_string(),
+                        "Installation".to_string(),
+                        "Description".to_string(),
+                    );
+                    d.apps.iter().for_each(|app| {
+                        let cmd = format!("pix -i {}", app.name);
+                        list_online(false, app.name.clone(), cmd, app.description.clone());
+                    })
+                }
+                None => println!("No apps found."),
+            }
+            println!();
         }
         _ => {
             let helper = pix.clone().print_help();
