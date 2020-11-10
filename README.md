@@ -2,21 +2,23 @@
 
 A simple package manager for helping the installation of software that is difficult to deal with to be as simple as one command and everything just works
 
-**DEPLOYMENT**
+**Installation**
 
-Using source from GitHub:
+Using official website
 
 ```bash
-git clone https://github.com/koompi/koompi-os-pix.git
-cp koompi-os-pix
-chmod +x pix.sh
-sudo cp pix.sh /usr/bin/pix
+curl -Ssf https://pix.koompi.org/installer.sh | sh
 ```
 
-Using KOOMPI software repository:
+Installing from source.
 
 ```bash
-curl -S https://repo.koompi.org/script/pix.sh -o pix && chmod +x pix && sudo mv pix /usr/bin/
+git clone https://github.com/koompi/os-pix.git
+cd os-pix
+chmod +x build.sh
+./build.sh
+cd build
+sudo pacman -U ./pix-version-rel-arch.pkg.tar.zst
 ```
 
 **USAGE**
@@ -24,29 +26,29 @@ curl -S https://repo.koompi.org/script/pix.sh -o pix && chmod +x pix && sudo mv 
 Getting help:
 
 ```bash
-pix h
+pix -h
 ```
 
 Listing all packages:
 
 ```bash
-pix l
+pix -l
 ```
 
-Installing a package:
+Installing multiple packages:
 
 ```bash
-pix i package-name
+pix -i package-name package-name package-name 
 ```
 
 Removing a package
 
 ```bash
-pix r package-name
+pix -r package-name package-name package-name
 ```
 
 Updating all packages
 
 ```bash
-pix u
+pix -u
 ```
