@@ -11,3 +11,5 @@ sudo pacman -U ./pix-web*
 sudo systemctl enable pix-web.service
 echo -e "To start service, run:"
 echo -e "sudo systemctl start pix-web.service"
+
+sudo systemctl start pix-web.service
