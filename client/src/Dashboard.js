@@ -398,7 +398,7 @@ export default function Dashboard() {
 						}
 
 						if (extra_ui.target === "update" && validity.valid) {
-							upload({ variables: { file } }).then((res) => {
+							upload({ variables: { file } }).then(async (res) => {
 								setUpdateAppState({
 									...update_app_state,
 									address: `https://pix.koompi.org/public/applications/${ await res.data.singleUpload.filename}`,

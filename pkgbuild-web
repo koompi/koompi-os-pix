@@ -14,19 +14,24 @@ license=('GPL3')
 depends=('glibc')
 makedepends=('llvm'  'autoconf' 'automake' 'binutils' 'bison' 'fakeroot' 'file' 'findutils' 'flex' 'gawk' 'gcc' 'gettext' 'grep' 'groff' 'gzip' 'libtool' 'm4' 'make' 'pacman' 'patch' 'pkgconf' 'sed' 'sudo' 'texinfo' 'which' 'rustup' 'git'  'clang' 'cmake' 'openssl' 'nodejs' 'npm')
 provides=('pix-web')
-source=('https://github.com/koompi/os-pix/archive/v1.0.0-alpha.tar.gz')
+source=('git+https://github.com/koompi/os-pix.git')
 md5sums=('5ca08138b568354314c9034de9a5c6e1') #generate with 'makepkg -g'
+
+pkgver() {
+  cd "os-pix"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
 
 prepare() {
     rustup default stable
 }
 
 build() {
-	cd "$srcdir/os-pix-1.0.0-alpha"
-    sed -i 's/http:\/\/localhost:4000/https:\/\/pix.koompi.org/' "$srcdir/os-pix-1.0.0-alpha/bin/src/graph.rs"
+	cd "$srcdir/os-pix"
+    sed -i 's/http:\/\/localhost:4000/https:\/\/pix.koompi.org/' "$srcdir/os-pix/bin/src/graph.rs"
     cargo build --release -p backend
 
-    cd "$srcdir/os-pix-1.0.0-alpha/client"
+    cd "$srcdir/os-pix/client"
     npm install
     npm run build
 }
@@ -34,9 +39,9 @@ build() {
 package() {
     mkdir -p "${pkgdir}/var/www/pix.koompi.org/public/applications"
     mkdir -p "${pkgdir}/etc/systemd/system/"
-    install -Dm644 "${srcdir}/os-pix-1.0.0-alpha/db.json" -t "${pkgdir}/var/www/pix.koompi.org/"
-    install -Dm755 "${srcdir}/os-pix-1.0.0-alpha/target/release/backend" -t "${pkgdir}/var/www/pix.koompi.org/"
-    rsync -av ${srcdir}/os-pix-1.0.0-alpha/client/build/* "${pkgdir}/var/www/pix.koompi.org/public/"
+    install -Dm644 "${srcdir}/os-pix/db.json" -t "${pkgdir}/var/www/pix.koompi.org/"
+    install -Dm755 "${srcdir}/os-pix/target/release/backend" -t "${pkgdir}/var/www/pix.koompi.org/"
+    rsync -av ${srcdir}/os-pix/client/build/* "${pkgdir}/var/www/pix.koompi.org/public/"
     install -Dm644 "${srcdir}/pix-${pkgver}-${pkgrel}-any.pkg.tar.zst" "${pkgdir}/var/www/pix.koompi.org/public/"
     
     {
