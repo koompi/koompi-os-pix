@@ -17,7 +17,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createUploadLink({
-	uri: "/",
+	uri: "https://pix.koompi.org",
 	headers: {
 		credentials: "same-origin",
 		"content-type": "application/json",

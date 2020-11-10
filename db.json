@@ -1,21 +1,4 @@
 {
-  "applications": [
-    {
-      "name": "master-pdf-editor5",
-      "description": "PDF editor",
-      "maintainer": "Brilliant PHAL",
-      "pgp_key": "",
-      "build_date": "20201111",
-      "address": "http://localhost:4000/public/applications/master-pdf-editor5_20200602.tar.gz"
-    },
-    {
-      "name": "khmer-typing",
-      "description": "Typing training",
-      "maintainer": "Brilliant PHAL",
-      "pgp_key": "",
-      "build_date": "20201109",
-      "address": "http://localhost:4000/public/applications/khmer-typing_20200515.tar.gz"
-    }
-  ],
+  "applications": [],
   "version": "2020-10-28 12:18:33.541559725 UTC"
 }

@@ -2,5 +2,5 @@
 *.tar.gz
 .env
 public/
-output/
 fakeroot/
+build

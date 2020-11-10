@@ -389,10 +389,10 @@ export default function Dashboard() {
 						},
 					}) => {
 						if (extra_ui.target === "add" && validity.valid) {
-							upload({ variables: { file } }).then((res) => {
+							upload({ variables: { file } }).then(async (res) => {
 								setNewAppState({
 									...new_app_state,
-									address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+									address: `https://pix.koompi.org/public/applications/${ await res.data.singleUpload.filename}`,
 								});
 							});
 						}
@@ -401,7 +401,7 @@ export default function Dashboard() {
 							upload({ variables: { file } }).then((res) => {
 								setUpdateAppState({
 									...update_app_state,
-									address: `http://localhost:4000/public/applications/${res.data.singleUpload.filename}`,
+									address: `https://pix.koompi.org/public/applications/${ await res.data.singleUpload.filename}`,
 								});
 							});
 						}

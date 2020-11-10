@@ -1,0 +1,67 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# Maintainer: Your Name <brilliant@koompi.org>
+pkgname=pix-web
+pkgver=v1.0.0_alpha
+pkgrel=1
+pkgdesc="Installation and configuration done in one command "
+arch=('any')
+url="https://github.com/koompi/os-pix/"
+license=('GPL3')
+depends=('glibc')
+makedepends=('llvm'  'autoconf' 'automake' 'binutils' 'bison' 'fakeroot' 'file' 'findutils' 'flex' 'gawk' 'gcc' 'gettext' 'grep' 'groff' 'gzip' 'libtool' 'm4' 'make' 'pacman' 'patch' 'pkgconf' 'sed' 'sudo' 'texinfo' 'which' 'rustup' 'git'  'clang' 'cmake' 'openssl' 'nodejs' 'npm')
+provides=('pix-web')
+source=('https://github.com/koompi/os-pix/archive/v1.0.0-alpha.tar.gz')
+md5sums=('5ca08138b568354314c9034de9a5c6e1') #generate with 'makepkg -g'
+
+prepare() {
+    rustup default stable
+}
+
+build() {
+	cd "$srcdir/os-pix-1.0.0-alpha"
+    sed -i 's/http:\/\/localhost:4000/https:\/\/pix.koompi.org/' "$srcdir/os-pix-1.0.0-alpha/bin/src/graph.rs"
+    cargo build --release -p backend
+
+    cd "$srcdir/os-pix-1.0.0-alpha/client"
+    npm install
+    npm run build
+}
+
+package() {
+    mkdir -p "${pkgdir}/var/www/pix.koompi.org/public/applications"
+    mkdir -p "${pkgdir}/etc/systemd/system/"
+    install -Dm644 "${srcdir}/os-pix-1.0.0-alpha/db.json" -t "${pkgdir}/var/www/pix.koompi.org/"
+    install -Dm755 "${srcdir}/os-pix-1.0.0-alpha/target/release/backend" -t "${pkgdir}/var/www/pix.koompi.org/"
+    rsync -av ${srcdir}/os-pix-1.0.0-alpha/client/build/* "${pkgdir}/var/www/pix.koompi.org/public/"
+    install -Dm644 "${srcdir}/pix-${pkgver}-${pkgrel}-any.pkg.tar.zst" "${pkgdir}/var/www/pix.koompi.org/public/"
+    
+    {
+    echo '#!/bin/bash'
+    echo '[[ -f /usr/bin/pix ]] && sudo rm -rf /usr/bin/pix'
+    echo 'sudo groupadd pix'
+    echo 'sudo usermod -a -G pix $USER'
+    echo "curl -s https://pix.koompi.org/public/pix-${pkgver}-${pkgrel}-any.pkg.tar.zst -O"
+    echo "sudo pacman -U pix-${pkgver}-${pkgrel}-any.pkg.tar.zst"
+    echo 'sudo chgrp -R pix /var/lib/pix/'
+    echo 'sudo chmod -R 2775 /var/lib/pix/'
+    }>${srcdir}/installer.sh
+
+    install -Dm755 "${srcdir}/installer.sh" "${pkgdir}/var/www/pix.koompi.org/public/"
+
+    {
+    echo '[Unit]'
+    echo 'Description=pix-web'
+    echo '[Service]'
+    echo 'Type=exec'
+    echo 'WorkingDirectory=/var/www/pix.koompi.org/'
+    echo 'ExecStart=/var/www/pix.koompi.org/backend'
+    echo '[Install]'
+    echo 'WantedBy=multi-user.target'
+    } > ${pkgdir}/etc/systemd/system/pix-web.service
+
+}
+
