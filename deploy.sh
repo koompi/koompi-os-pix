@@ -2,6 +2,8 @@
 wd=$(pwd)
 bd=${wd}/build
 
+cd ${wd}
+sh ${wd}/build.sh
 cd ${bd}
 sudo pacman -U ./pix-web*
 [[ ! -f ${wd}/.env ]] && echo -e "\nENV file not found.\nPlease place a .env file in\n/var/www/pix-web/\n"

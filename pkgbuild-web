@@ -19,6 +19,7 @@ md5sums=('5ca08138b568354314c9034de9a5c6e1') #generate with 'makepkg -g'
 
 pkgver() {
   cd "os-pix"
+  git checkout v1
   git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 

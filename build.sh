@@ -21,6 +21,7 @@ function build_web() {
     cd ${bd}/web
     sed -i "s/md5sums=.*/$(makepkg -g)/g" PKGBUILD
     makepkg -s
+    ${bd}/web/src/*.tar.zst ${bd}
     cp *.tar.zst ${bd}/
 }
 
