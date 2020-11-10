@@ -14,16 +14,22 @@ license=('GPL3')
 depends=('glibc')
 makedepends=('llvm'  'autoconf' 'automake' 'binutils' 'bison' 'fakeroot' 'file' 'findutils' 'flex' 'gawk' 'gcc' 'gettext' 'grep' 'groff' 'gzip' 'libtool' 'm4' 'make' 'pacman' 'patch' 'pkgconf' 'sed' 'sudo' 'texinfo' 'which' 'rustup' 'git'  'clang' 'cmake' 'openssl')
 provides=('pix')
-source=('https://github.com/koompi/os-pix/archive/v1.0.0-alpha.tar.gz')
+source=('git+https://github.com/koompi/os-pix.git')
 md5sums=('5ca08138b568354314c9034de9a5c6e1') #generate with 'makepkg -g'
+
+pkgver() {
+  cd "os-pix"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
 
 prepare() {
     rustup default stable
 }
 
 build() {
-	cd "$srcdir/os-pix-1.0.0-alpha"
-    sed -i 's/http:\/\/localhost:4000/https:\/\/pix.koompi.org/' "$srcdir/os-pix-1.0.0-alpha/bin/src/graph.rs"
+	cd "$srcdir/os-pix"
+    sed -i 's/http:\/\/localhost:4000/https:\/\/pix.koompi.org/' "$srcdir/os-pix/bin/src/graph.rs"
     cargo build --release
 }
 
@@ -31,11 +37,11 @@ package() {
 
     mkdir -p "${pkgdir}/var/lib/pix/db"
     mkdir -p "${pkgdir}/var/lib/pix/registry"
-    cp "$srcdir/os-pix-1.0.0-alpha/db.json" "${pkgdir}/var/lib/pix/db"
+    cp "$srcdir/os-pix/db.json" "${pkgdir}/var/lib/pix/db"
     chgrp -R pix "${pkgdir}/var/lib/pix"
     chmod -R 2775 "${pkgdir}/var/lib/pix"
-    mv "$srcdir/os-pix-1.0.0-alpha/target/release/bin" "$srcdir/os-pix-1.0.0-alpha/target/release/pix"
-    install -Dm755 "$srcdir/os-pix-1.0.0-alpha/target/release/pix" -t "${pkgdir}/usr/bin/"
+    mv "$srcdir/os-pix/target/release/bin" "$srcdir/os-pix/target/release/pix"
+    install -Dm755 "$srcdir/os-pix/target/release/pix" -t "${pkgdir}/usr/bin/"
 
 }
 
