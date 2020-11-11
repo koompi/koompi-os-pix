@@ -70,11 +70,18 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .data(schema.clone())
             .wrap(
+                // Cors::default()
+                //     .allow_any_header()
+                //     .allowed_methods(vec!["POST"])
+                //     .allow_any_origin()
+                //     .allowed_header(header::CONTENT_TYPE),
                 Cors::default()
-                    .allow_any_header()
-                    .allowed_methods(vec!["POST"])
-                    .allow_any_origin()
-                    .allowed_header(header::CONTENT_TYPE),
+                    .allowed_origin("https://pix.koompi.org")
+                    .allowed_methods(vec!["GET", "POST"])
+                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                    .allowed_header(header::CONTENT_TYPE)
+                    .supports_credentials()
+                    .max_age(3600),
             )
             .service(
                 web::resource("/")

@@ -1,4 +1,4 @@
-import { Switch, Route, NavLink } from "react-router-dom";
+import { Switch, Route, NavLink, Redirect } from "react-router-dom";
 import NotFound from "./NotFound";
 import Home from "./Home";
 import Packages from "./Packages";
@@ -8,6 +8,7 @@ import Dashboard from "./Dashboard";
 function App() {
 	return (
 		<div className="AppContainer">
+			{ window.location.protocol !== "https:" && <Redirect to={`https://${window.location.host}${window.location.pathname}`} />}
 			<div className="tab_bar">
 				<NavLink exact className="nav" to="/" activeClassName="active">
 					Home
