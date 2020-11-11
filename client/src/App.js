@@ -6,9 +6,12 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 
 function App() {
+	if (location.protocol !== "https:") {
+		location.protocol = "https:";
+	}
 	return (
 		<div className="AppContainer">
-			{ window.location.protocol !== "https:" && <Redirect to={`https://${window.location.host}${window.location.pathname}`} />}
+			
 			<div className="tab_bar">
 				<NavLink exact className="nav" to="/" activeClassName="active">
 					Home
