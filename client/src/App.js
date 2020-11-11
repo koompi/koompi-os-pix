@@ -6,8 +6,8 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 
 function App() {
-	if (location.protocol !== "https:") {
-		location.protocol = "https:";
+	if (window.location.protocol !== "https:") {
+		window.location.protocol = "https:";
 	}
 	return (
 		<div className="AppContainer">
