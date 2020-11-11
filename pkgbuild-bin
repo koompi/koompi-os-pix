@@ -38,11 +38,11 @@ package() {
 
     mkdir -p "${pkgdir}/var/lib/pix/db"
     mkdir -p "${pkgdir}/var/lib/pix/registry"
-    cp "$srcdir/os-pix/db.json" "${pkgdir}/var/lib/pix/db"
     chgrp -R pix "${pkgdir}/var/lib/pix"
     chmod -R 2775 "${pkgdir}/var/lib/pix"
     mv "$srcdir/os-pix/target/release/bin" "$srcdir/os-pix/target/release/pix"
     install -Dm755 "$srcdir/os-pix/target/release/pix" -t "${pkgdir}/usr/bin/"
-
+    echo '{"packages":[]}' > ${pkgdir}/var/lib/pix/db/db.json
+    
 }
 
