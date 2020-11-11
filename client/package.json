@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
+  "author": {"name": "Brilliant PHAL", "email": "brilliant@koompi.org", "url": "https://koompi.org"},
   "private": true,
   "proxy": "https://pix.koompi.org",
   "dependencies": {
