@@ -15,7 +15,7 @@ lazy_static! {
     static ref PIX_DIR: PathBuf = ROOT.join("var/lib/pix");
     static ref DB_DIR: PathBuf = PIX_DIR.join("db");
     static ref REG_DIR: PathBuf = PIX_DIR.join("reg");
-    static ref TMP_DIR: PathBuf = ROOT.join("tml");
+    static ref TMP_DIR: PathBuf = ROOT.join("tmp");
     static ref CONF_DIR: PathBuf = rd().join("etc/pi.conf.d");
 
     // Files

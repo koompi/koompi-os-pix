@@ -36,7 +36,7 @@ pub async fn download(file_path: &str, app_name: &str, address: &str) -> Result<
             ))
             .progress_chars("#>-"),
     );
-
+    println!("{}", file_path);
     let file = Path::new(file_path);
 
     if file.exists() {

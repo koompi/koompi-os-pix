@@ -104,6 +104,7 @@ impl Database {
                         .arg("installer.sh")
                         .stderr(Stdio::piped())
                         .output();
+
                     match io::stdout().write_all(cmd.unwrap().stderr.as_ref()) {
                         Ok(_) => {
                             let uninstaller: String =

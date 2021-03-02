@@ -41,6 +41,7 @@ pub fn extract(name: &str, src: &str, dest: &str) -> std::io::Result<()> {
 
     for file in archive.entries().unwrap() {
         let mut file = file.unwrap();
+        println!("{}", dest);
         file.unpack(format!("{}/{}", dest, file.path().unwrap().display()))
             .unwrap();
         pb.inc(file.header().entry_size().unwrap());
