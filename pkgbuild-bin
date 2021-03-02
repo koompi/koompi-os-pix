@@ -5,8 +5,8 @@
 
 # Maintainer: Your Name <brilliant@koompi.org>
 pkgname=pix
-pkgver=v1.0.0_beta
-pkgrel=2
+pkgver=v1.0.0
+pkgrel=1
 pkgdesc="Installation and configuration done in one command "
 arch=('any')
 url="https://github.com/koompi/os-pix/"
