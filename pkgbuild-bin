@@ -6,7 +6,7 @@
 # Maintainer: Your Name <brilliant@koompi.org>
 pkgname=pix
 pkgver=v1.0.0_beta
-pkgrel=1
+pkgrel=2
 pkgdesc="Installation and configuration done in one command "
 arch=('any')
 url="https://github.com/koompi/os-pix/"
@@ -16,13 +16,6 @@ makedepends=('llvm'  'autoconf' 'automake' 'binutils' 'bison' 'fakeroot' 'file' 
 provides=('pix')
 source=('git+https://github.com/koompi/os-pix.git')
 md5sums=('5ca08138b568354314c9034de9a5c6e1') #generate with 'makepkg -g'
-
-pkgver() {
-  cd "os-pix"
-  # git checkout v1
-  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
-}
-
 
 prepare() {
     rustup default stable

@@ -102,7 +102,6 @@ impl Database {
                     let cmd = Command::new("sh")
                         .current_dir(&app.dest)
                         .arg("installer.sh")
-                        .stderr(Stdio::piped())
                         .output();
 
                     match io::stdout().write_all(cmd.unwrap().stderr.as_ref()) {
