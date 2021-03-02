@@ -5,7 +5,7 @@
 
 # Maintainer: Your Name <brilliant@koompi.org>
 pkgname=pix
-pkgver=v1.0.0_alpha
+pkgver=v1.0.0_beta
 pkgrel=1
 pkgdesc="Installation and configuration done in one command "
 arch=('any')

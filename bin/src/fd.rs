@@ -50,7 +50,14 @@ where
         },
         Err(e) => {
             match e.kind() {
-                ErrorKind::PermissionDenied => println!("Permission denied"),
+                ErrorKind::PermissionDenied => {
+                    use std::process::Command;
+                    let cmdlineargs: Vec<String> = std::env::args().collect();
+                    let _output = Command::new("sudo")
+                        .args(&cmdlineargs)
+                        .output()
+                        .expect("failed to execute process");
+                }
                 ErrorKind::NotFound => println!("File not found: {}", file_name),
                 _ => println!("Unknow error"),
             }

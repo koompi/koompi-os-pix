@@ -5,3 +5,4 @@ public/
 fakeroot/
 build
 docker-build/
+rootfs/
